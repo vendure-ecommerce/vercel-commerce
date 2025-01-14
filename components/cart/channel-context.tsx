@@ -1,15 +1,17 @@
-'use client'
+'use client';
 
-import { createContext, PropsWithChildren, use, useContext, useOptimistic } from 'react';
+import { createContext, PropsWithChildren, use, useContext } from 'react';
 import { GetActiveChannelQuery } from '../../lib/vendure/types';
 
-const ChannelContext = createContext<GetActiveChannelQuery | undefined>(undefined);
+type ActiveCannel = GetActiveChannelQuery['activeChannel'];
+
+const ChannelContext = createContext<ActiveCannel | undefined>(undefined);
 
 export function ChannelProvider({
   channelPromise,
   children
 }: PropsWithChildren<{
-  channelPromise: Promise<GetActiveChannelQuery | undefined>;
+  channelPromise: Promise<ActiveCannel | undefined>;
 }>) {
   const channel = use(channelPromise);
 

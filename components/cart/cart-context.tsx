@@ -24,15 +24,9 @@ export function CartProvider({
 }) {
   const initialCart = use(activeOrderPromise);
 
-  const updateCartItem = (merchandiseId: string, updateType: UpdateType) => {};
-
-  const addCartItem = (variant: ProductVariant, product: Product) => {};
-
   const value = useMemo(
     () => ({
-      cart: initialCart,
-      updateCartItem,
-      addCartItem
+      cart: initialCart
     }),
     [initialCart]
   );
