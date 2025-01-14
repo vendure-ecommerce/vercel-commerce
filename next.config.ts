@@ -1,5 +1,7 @@
 export default {
   images: {
+    loader: 'custom',
+    loaderFile: 'image-loader.js',
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {

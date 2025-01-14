@@ -10,6 +10,8 @@ export function Gallery({ images }: { images: { src: string; altText: string }[]
   const updateURL = useUpdateURL();
   const imageIndex = state.image ? parseInt(state.image) : 0;
 
+  console.log({images})
+
   const nextImageIndex = imageIndex + 1 < images.length ? imageIndex + 1 : 0;
   const previousImageIndex = imageIndex === 0 ? images.length - 1 : imageIndex - 1;
 

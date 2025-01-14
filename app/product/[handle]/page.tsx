@@ -90,7 +90,7 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
             >
               <Gallery
                 images={product.assets.slice(0, 5).map((asset) => ({
-                  src: asset.preview,
+                  src: asset.source,
                   altText: product.name
                 }))}
               />

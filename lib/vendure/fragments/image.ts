@@ -4,6 +4,7 @@ const assetFragment = /* GraphQL */ `
         preview
         width
         height
+        name
     }
 `;
 
