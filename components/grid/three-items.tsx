@@ -1,39 +1,41 @@
 import { GridTileImage } from 'components/grid/tile';
-import { getCollectionProducts } from 'lib/vendure';
-import type { Product } from 'lib/vendure/types';
+import {getActiveChannel, getCollectionProducts} from 'lib/vendure';
+import type {Product, SearchResultFragment} from 'lib/vendure/types';
 import Link from 'next/link';
+import {useActiveChannel} from "../cart/channel-context";
 
-function ThreeItemGridItem({
+async function ThreeItemGridItem({
   item,
   size,
   priority
 }: {
-  item: Product;
+  item: SearchResultFragment;
   size: 'full' | 'half';
   priority?: boolean;
 }) {
+  const activeChannel = await getActiveChannel()
   return (
     <div
       className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}
     >
       <Link
         className="relative block aspect-square h-full w-full"
-        href={`/product/${item.handle}`}
+        href={`/product/${item.slug}`}
         prefetch={true}
       >
         <GridTileImage
-          src={item.featuredImage.url}
+          src={item.productAsset?.preview ?? ''}
           fill
           sizes={
             size === 'full' ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'
           }
           priority={priority}
-          alt={item.title}
+          alt={item.productName}
           label={{
             position: size === 'full' ? 'center' : 'bottom',
-            title: item.title as string,
-            amount: item.priceRange.maxVariantPrice.amount,
-            currencyCode: item.priceRange.maxVariantPrice.currencyCode
+            title: item.productName as string,
+            amount: '0',
+            currencyCode: activeChannel.defaultCurrencyCode
           }}
         />
       </Link>
@@ -44,7 +46,7 @@ function ThreeItemGridItem({
 export async function ThreeItemGrid() {
   // Collections that start with `hidden-*` are hidden from the search page.
   const homepageItems = await getCollectionProducts({
-    collection: 'hidden-homepage-featured-items'
+    collection: 'home-page-featured-items'
   });
 
   if (!homepageItems[0] || !homepageItems[1] || !homepageItems[2]) return null;

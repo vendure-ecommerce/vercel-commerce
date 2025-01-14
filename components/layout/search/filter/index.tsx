@@ -2,10 +2,10 @@ import { SortFilterItem } from 'lib/constants';
 import { Suspense } from 'react';
 import FilterItemDropdown from './dropdown';
 import { FilterItem } from './item';
-import { FilterListItem } from './types';
+import { CollectionFragment } from '../../../../lib/vendure/types';
 
 export type ListItem = SortFilterItem | PathFilterItem;
-export type PathFilterItem = FilterListItem;
+export type PathFilterItem = CollectionFragment;
 
 function FilterItemList({ list }: { list: ListItem[] }) {
   return (
