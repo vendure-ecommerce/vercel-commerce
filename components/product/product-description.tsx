@@ -1,26 +1,33 @@
 import { AddToCart } from 'components/cart/add-to-cart';
 import Price from 'components/price';
 import Prose from 'components/prose';
-import { Product } from 'lib/shopify/types';
+import { GetProductQuery, Product, ProductVariant } from 'lib/vendure/types';
 import { VariantSelector } from './variant-selector';
+import { useActiveChannel } from '../cart/channel-context';
+import { getActiveChannel } from '../../lib/vendure';
 
-export function ProductDescription({ product }: { product: Product }) {
+export async function ProductDescription({ product }: { product: Product }) {
+  const fromPrice = product?.variantList.items
+    .map((variant: ProductVariant) => variant.priceWithTax)
+    .sort()
+    .at(0);
+  const activeChannel = await getActiveChannel();
+
   return (
     <>
       <div className="mb-6 flex flex-col border-b pb-6 dark:border-neutral-700">
-        <h1 className="mb-2 text-5xl font-medium">{product.title}</h1>
-        <div className="mr-auto w-auto rounded-full bg-blue-600 p-2 text-sm text-white">
-          <Price
-            amount={product.priceRange.maxVariantPrice.amount}
-            currencyCode={product.priceRange.maxVariantPrice.currencyCode}
-          />
-        </div>
+        <h1 className="mb-2 text-5xl font-medium">{product?.name}</h1>
+        {fromPrice && (
+          <div className="mr-auto w-auto rounded-full bg-blue-600 p-2 text-sm text-white">
+            <Price amount={fromPrice} currencyCode={activeChannel.defaultCurrencyCode} />
+          </div>
+        )}
       </div>
-      <VariantSelector options={product.options} variants={product.variants} />
-      {product.descriptionHtml ? (
+      <VariantSelector optionGroups={product?.optionGroups} variants={product?.variantList.items} />
+      {product?.description ? (
         <Prose
           className="mb-6 text-sm leading-tight dark:text-white/[60%]"
-          html={product.descriptionHtml}
+          html={product.description}
         />
       ) : null}
       <AddToCart product={product} />

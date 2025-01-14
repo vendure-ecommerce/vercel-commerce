@@ -1,29 +1,34 @@
 export type SortFilterItem = {
-  title: string;
+  name: string;
   slug: string | null;
-  sortKey: 'RELEVANCE' | 'BEST_SELLING' | 'CREATED_AT' | 'PRICE';
-  reverse: boolean;
+  sortKey: 'name' | 'price';
+  direction: 'ASC' | 'DESC';
 };
 
 export const defaultSort: SortFilterItem = {
-  title: 'Relevance',
-  slug: null,
-  sortKey: 'RELEVANCE',
-  reverse: false
+  name: 'Name: A to Z',
+  slug: 'name-a-z',
+  sortKey: 'name',
+  direction: 'ASC'
 };
 
 export const sorting: SortFilterItem[] = [
   defaultSort,
-  { title: 'Trending', slug: 'trending-desc', sortKey: 'BEST_SELLING', reverse: false }, // asc
-  { title: 'Latest arrivals', slug: 'latest-desc', sortKey: 'CREATED_AT', reverse: true },
-  { title: 'Price: Low to high', slug: 'price-asc', sortKey: 'PRICE', reverse: false }, // asc
-  { title: 'Price: High to low', slug: 'price-desc', sortKey: 'PRICE', reverse: true }
+  {
+    name: 'Name: Z to A',
+    slug: 'name-z-a',
+    sortKey: 'name',
+    direction: 'DESC'
+  },
+  { name: 'Price: Low to high', slug: 'price-asc', sortKey: 'price', direction: 'ASC' }, // asc
+  { name: 'Price: High to low', slug: 'price-desc', sortKey: 'price', direction: 'DESC' }
 ];
 
 export const TAGS = {
   collections: 'collections',
   products: 'products',
-  cart: 'cart'
+  cart: 'cart',
+  channel: 'channel'
 };
 
 export const HIDDEN_PRODUCT_TAG = 'nextjs-frontend-hidden';

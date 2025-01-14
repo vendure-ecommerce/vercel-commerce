@@ -3,7 +3,7 @@
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { updateItemQuantity } from 'components/cart/actions';
-import type { CartItem } from 'lib/shopify/types';
+import type { OrderLine } from 'lib/vendure/types';
 import { useActionState } from 'react';
 
 function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
@@ -29,16 +29,14 @@ function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
 
 export function EditItemQuantityButton({
   item,
-  type,
-  optimisticUpdate
+  type
 }: {
-  item: CartItem;
+  item: OrderLine;
   type: 'plus' | 'minus';
-  optimisticUpdate: any;
 }) {
   const [message, formAction] = useActionState(updateItemQuantity, null);
   const payload = {
-    merchandiseId: item.merchandise.id,
+    merchandiseId: item.id,
     quantity: type === 'plus' ? item.quantity + 1 : item.quantity - 1
   };
   const actionWithVariant = formAction.bind(null, payload);
@@ -46,7 +44,6 @@ export function EditItemQuantityButton({
   return (
     <form
       action={async () => {
-        optimisticUpdate(payload.merchandiseId, type);
         await actionWithVariant();
       }}
     >

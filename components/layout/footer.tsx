@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import FooterMenu from 'components/layout/footer-menu';
 import LogoSquare from 'components/logo-square';
-import { getMenu } from 'lib/shopify';
+import { getMenu } from 'lib/vendure';
 import { Suspense } from 'react';
 
 const { COMPANY_NAME, SITE_NAME } = process.env;
@@ -11,7 +11,7 @@ export default async function Footer() {
   const currentYear = new Date().getFullYear();
   const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : '');
   const skeleton = 'w-full h-6 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700';
-  const menu = await getMenu('next-js-frontend-footer-menu');
+  const menu = await getMenu();
   const copyrightName = COMPANY_NAME || SITE_NAME || '';
 
   return (
@@ -60,8 +60,15 @@ export default async function Footer() {
             <a href="https://github.com/vercel/commerce">View the source</a>
           </p>
           <p className="md:ml-auto">
-            <a href="https://vercel.com" className="text-black dark:text-white">
-              Created by ▲ Vercel
+            <a
+              href="https://vendure.io"
+              className="flex items-center gap-1 text-black dark:text-white"
+            >
+              <span className="block"> Built with 💙 by</span>
+              <img
+                className="h-5 w-auto brightness-0 "
+                src="https://a.storyblok.com/f/192301/434x95/74c676913c/vendure-wordmark-primary.svg"
+              />
             </a>
           </p>
         </div>
