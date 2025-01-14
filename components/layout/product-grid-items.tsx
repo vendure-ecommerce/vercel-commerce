@@ -1,9 +1,8 @@
 import Grid from 'components/grid';
 import { GridTileImage } from 'components/grid/tile';
-import { GetCollectionProductsQuery, Product } from 'lib/vendure/types';
+import { GetCollectionProductsQuery } from 'lib/vendure/types';
 import Link from 'next/link';
-import { getActiveChannel } from '../../lib/vendure';
-import { useActiveChannel } from '../cart/channel-context';
+import { getSearchResultPrice } from '../../lib/utils';
 
 export default function ProductGridItems({
   products,
@@ -25,12 +24,7 @@ export default function ProductGridItems({
               alt={product.productName}
               label={{
                 title: product.productName,
-                amount: (product.priceWithTax.__typename === 'SinglePrice'
-                  ? product.priceWithTax.value
-                  : product.priceWithTax.__typename === 'PriceRange'
-                    ? product.priceWithTax.max
-                    : 0
-                ).toFixed(2),
+                amount: getSearchResultPrice(product),
                 currencyCode
               }}
               src={product.productAsset?.preview || ''}

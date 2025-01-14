@@ -1,15 +1,12 @@
 import { AddToCart } from 'components/cart/add-to-cart';
 import Price from 'components/price';
 import Prose from 'components/prose';
-import { GetProductQuery, ProductFragment, ProductVariant } from 'lib/vendure/types';
+import { ProductFragment } from 'lib/vendure/types';
 import { VariantSelector } from './variant-selector';
 import { getActiveChannel } from '../../lib/vendure';
 
 export async function ProductDescription({ product }: { product: ProductFragment }) {
-  const fromPrice = product?.variantList.items
-    .map((variant) => variant.priceWithTax)
-    .sort()
-    .at(0);
+  const fromPrice = product.priceRange.min;
   const activeChannel = await getActiveChannel();
 
   return (

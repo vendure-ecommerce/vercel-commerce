@@ -1,8 +1,9 @@
 import { GridTileImage } from 'components/grid/tile';
-import {getActiveChannel, getCollectionProducts} from 'lib/vendure';
-import type {Product, SearchResultFragment} from 'lib/vendure/types';
+import { getActiveChannel, getCollectionProducts } from 'lib/vendure';
+import type { Product, SearchResultFragment } from 'lib/vendure/types';
 import Link from 'next/link';
-import {useActiveChannel} from "../cart/channel-context";
+import { useActiveChannel } from '../cart/channel-context';
+import { getSearchResultPrice } from '../../lib/utils';
 
 async function ThreeItemGridItem({
   item,
@@ -13,7 +14,7 @@ async function ThreeItemGridItem({
   size: 'full' | 'half';
   priority?: boolean;
 }) {
-  const activeChannel = await getActiveChannel()
+  const activeChannel = await getActiveChannel();
   return (
     <div
       className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}
@@ -34,7 +35,7 @@ async function ThreeItemGridItem({
           label={{
             position: size === 'full' ? 'center' : 'bottom',
             title: item.productName as string,
-            amount: '0',
+            amount: getSearchResultPrice(item),
             currencyCode: activeChannel.defaultCurrencyCode
           }}
         />

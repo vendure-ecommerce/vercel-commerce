@@ -10,8 +10,6 @@ export function Gallery({ images }: { images: { src: string; altText: string }[]
   const updateURL = useUpdateURL();
   const imageIndex = state.image ? parseInt(state.image) : 0;
 
-  console.log({images})
-
   const nextImageIndex = imageIndex + 1 < images.length ? imageIndex + 1 : 0;
   const previousImageIndex = imageIndex === 0 ? images.length - 1 : imageIndex - 1;
 
@@ -62,7 +60,7 @@ export function Gallery({ images }: { images: { src: string; altText: string }[]
       </div>
 
       {images.length > 1 ? (
-        <ul className="my-12 flex items-center flex-wrap justify-center gap-2 overflow-auto py-1 lg:mb-0">
+        <ul className="my-12 flex flex-wrap items-center justify-center gap-2 overflow-auto py-1 lg:mb-0">
           {images.map((image, index) => {
             const isActive = index === imageIndex;
 

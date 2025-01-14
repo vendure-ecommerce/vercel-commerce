@@ -1,4 +1,5 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
+import { SearchResultFragment } from './vendure/types';
 
 export const createUrl = (pathname: string, params: URLSearchParams | ReadonlyURLSearchParams) => {
   const paramsString = params.toString();
@@ -11,7 +12,7 @@ export const ensureStartsWith = (stringToCheck: string, startsWith: string) =>
   stringToCheck.startsWith(startsWith) ? stringToCheck : `${startsWith}${stringToCheck}`;
 
 export const validateEnvironmentVariables = () => {
-  const requiredEnvironmentVariables = ['SHOPIFY_STORE_DOMAIN', 'SHOPIFY_STOREFRONT_ACCESS_TOKEN'];
+  const requiredEnvironmentVariables = ['VENDURE_API_ENDPOINT', 'VENDURE_INSTANCE'];
   const missingEnvironmentVariables = [] as string[];
 
   requiredEnvironmentVariables.forEach((envVar) => {
@@ -27,13 +28,14 @@ export const validateEnvironmentVariables = () => {
       )}\n`
     );
   }
+};
 
-  if (
-    process.env.SHOPIFY_STORE_DOMAIN?.includes('[') ||
-    process.env.SHOPIFY_STORE_DOMAIN?.includes(']')
-  ) {
-    throw new Error(
-      'Your `SHOPIFY_STORE_DOMAIN` environment variable includes brackets (ie. `[` and / or `]`). Your site will not work with them there. Please remove them.'
-    );
-  }
+export const getSearchResultPrice = (item: SearchResultFragment) => {
+  return (
+    item.priceWithTax.__typename === 'SinglePrice'
+      ? item.priceWithTax.value
+      : item.priceWithTax.__typename === 'PriceRange'
+        ? item.priceWithTax.max
+        : 0
+  ).toFixed(2);
 };

@@ -1,6 +1,7 @@
 import { getActiveChannel, getCollectionProducts } from 'lib/vendure';
 import Link from 'next/link';
 import { GridTileImage } from './grid/tile';
+import { getSearchResultPrice } from '../lib/utils';
 
 export async function Carousel() {
   const activeChannel = await getActiveChannel();
@@ -25,7 +26,7 @@ export async function Carousel() {
                 alt={product.productName}
                 label={{
                   title: product.productName,
-                  amount: '0',
+                  amount: getSearchResultPrice(product),
                   currencyCode: activeChannel.defaultCurrencyCode
                 }}
                 src={product.productAsset?.preview ?? ''}
