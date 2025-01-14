@@ -1,4 +1,4 @@
-export interface ShopifyErrorLike {
+export interface VendureErrorLike {
   status: number;
   message: Error;
   cause?: Error;
@@ -8,7 +8,7 @@ export const isObject = (object: unknown): object is Record<string, unknown> => 
   return typeof object === 'object' && object !== null && !Array.isArray(object);
 };
 
-export const isVendureError = (error: unknown): error is ShopifyErrorLike => {
+export const isVendureError = (error: unknown): error is VendureErrorLike => {
   if (!isObject(error)) return false;
 
   if (error instanceof Error) return true;
