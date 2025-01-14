@@ -5,12 +5,14 @@ import React, { createContext, use, useContext, useMemo } from 'react';
 
 type UpdateType = 'plus' | 'minus' | 'delete';
 
+type ActiveOrder = Pick<ActiveOrderQuery, 'activeOrder'>['activeOrder'];
+
 type CartAction =
   | { type: 'UPDATE_ITEM'; payload: { merchandiseId: string; updateType: UpdateType } }
   | { type: 'ADD_ITEM'; payload: { variant: ProductVariant; product: Product } };
 
 type CartContextType = {
-  cart: ActiveOrderQuery['activeOrder'] | undefined;
+  cart: ActiveOrder | undefined;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -20,7 +22,7 @@ export function CartProvider({
   activeOrderPromise
 }: {
   children: React.ReactNode;
-  activeOrderPromise: Promise<ActiveOrderQuery['activeOrder'] | undefined | null>;
+  activeOrderPromise: Promise<ActiveOrder | undefined>;
 }) {
   const initialCart = use(activeOrderPromise);
 

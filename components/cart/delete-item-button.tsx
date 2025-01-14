@@ -5,7 +5,7 @@ import { removeItem } from 'components/cart/actions';
 import type {GetActiveOrderQuery, OrderLine} from 'lib/vendure/types';
 import { useActionState } from 'react';
 
-export function DeleteItemButton({ item }: { item: OrderLine }) {
+export function DeleteItemButton({ item }: { item: Pick<OrderLine, 'id'> }) {
   const [message, formAction] = useActionState(removeItem, null);
   const merchandiseId = item.id;
   const actionWithVariant = formAction.bind(null, merchandiseId);

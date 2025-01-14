@@ -31,7 +31,7 @@ export function EditItemQuantityButton({
   item,
   type
 }: {
-  item: OrderLine;
+  item: Pick<OrderLine, 'id' | 'quantity'>;
   type: 'plus' | 'minus';
 }) {
   const [message, formAction] = useActionState(updateItemQuantity, null);

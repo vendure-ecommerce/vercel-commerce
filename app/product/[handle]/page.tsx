@@ -6,11 +6,10 @@ import Footer from 'components/layout/footer';
 import { Gallery } from 'components/product/gallery';
 import { ProductProvider } from 'components/product/product-context';
 import { ProductDescription } from 'components/product/product-description';
-import { HIDDEN_PRODUCT_TAG } from 'lib/constants';
-import { getActiveChannel, getProduct, getProductRecommendations } from 'lib/vendure';
+import { getActiveChannel, getProduct } from 'lib/vendure';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import {Product} from "../../../lib/vendure/types";
+import { Product } from '../../../lib/vendure/types';
 
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;
@@ -112,7 +111,7 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
 }
 
 async function RelatedProducts({ id }: { id: string }) {
-  const relatedProducts: Product[] = []
+  const relatedProducts: Product[] = [];
 
   if (!relatedProducts.length) return null;
 
@@ -133,7 +132,7 @@ async function RelatedProducts({ id }: { id: string }) {
               <GridTileImage
                 alt={product.name}
                 label={{
-                  title: product.title,
+                  title: product.name,
                   amount: '0',
                   currencyCode: 'USD'
                 }}

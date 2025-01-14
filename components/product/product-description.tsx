@@ -1,14 +1,13 @@
 import { AddToCart } from 'components/cart/add-to-cart';
 import Price from 'components/price';
 import Prose from 'components/prose';
-import { GetProductQuery, Product, ProductVariant } from 'lib/vendure/types';
+import { GetProductQuery, ProductFragment, ProductVariant } from 'lib/vendure/types';
 import { VariantSelector } from './variant-selector';
-import { useActiveChannel } from '../cart/channel-context';
 import { getActiveChannel } from '../../lib/vendure';
 
-export async function ProductDescription({ product }: { product: Product }) {
+export async function ProductDescription({ product }: { product: ProductFragment }) {
   const fromPrice = product?.variantList.items
-    .map((variant: ProductVariant) => variant.priceWithTax)
+    .map((variant) => variant.priceWithTax)
     .sort()
     .at(0);
   const activeChannel = await getActiveChannel();
@@ -23,7 +22,10 @@ export async function ProductDescription({ product }: { product: Product }) {
           </div>
         )}
       </div>
-      <VariantSelector optionGroups={product?.optionGroups} variants={product?.variantList.items} />
+      <VariantSelector
+        optionGroups={product?.optionGroups ?? []}
+        variants={product?.variantList.items ?? []}
+      />
       {product?.description ? (
         <Prose
           className="mb-6 text-sm leading-tight dark:text-white/[60%]"

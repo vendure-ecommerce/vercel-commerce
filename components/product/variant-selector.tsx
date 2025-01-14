@@ -3,13 +3,12 @@
 import clsx from 'clsx';
 import { useProduct, useUpdateURL } from 'components/product/product-context';
 import {
-  GetProductQuery,
+  Product_Option_GroupFragment,
   ProductOption,
   ProductOptionGroup,
   ProductVariant,
-  ProductVariantList
+  VariantFragment
 } from 'lib/vendure/types';
-import { VendureProductType } from './types';
 
 type Combination = {
   id: string;
@@ -21,8 +20,8 @@ export function VariantSelector({
   optionGroups,
   variants
 }: {
-  optionGroups: Array<ProductOptionGroup>;
-  variants: Array<ProductVariant>;
+  optionGroups: Array<Product_Option_GroupFragment>;
+  variants: Array<VariantFragment>;
 }) {
   const { state, updateOption } = useProduct();
   const updateURL = useUpdateURL();
@@ -55,8 +54,7 @@ export function VariantSelector({
             const filtered = Object.entries(optionParams).filter(([key, value]) =>
               optionGroups.find(
                 (option) =>
-                  option.code === key &&
-                  option.options.findIndex((o) => o.code === value) !== -1
+                  option.code === key && option.options.findIndex((o) => o.code === value) !== -1
               )
             );
 

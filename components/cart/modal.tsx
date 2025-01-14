@@ -102,7 +102,7 @@ export default function CartModal() {
                         >
                           <div className="relative flex w-full flex-row justify-between px-1 py-4">
                             <div className="absolute z-40 -ml-1 -mt-2">
-                              <DeleteItemButton item={item}/>
+                              <DeleteItemButton item={item} />
                             </div>
                             <div className="flex flex-row">
                               {item.productVariant.product.featuredAsset && (
@@ -142,17 +142,11 @@ export default function CartModal() {
                                 currencyCode={cart.currencyCode}
                               />
                               <div className="ml-auto flex h-9 flex-row items-center rounded-full border border-neutral-200 dark:border-neutral-700">
-                                <EditItemQuantityButton
-                                  item={item}
-                                  type="minus"
-                                />
+                                <EditItemQuantityButton item={item} type="minus" />
                                 <p className="w-6 text-center">
                                   <span className="w-full text-sm">{item.quantity}</span>
                                 </p>
-                                <EditItemQuantityButton
-                                  item={item}
-                                  type="plus"
-                                />
+                                <EditItemQuantityButton item={item} type="plus" />
                               </div>
                             </div>
                           </div>
