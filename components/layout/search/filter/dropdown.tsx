@@ -28,8 +28,8 @@ export default function FilterItemDropdown({ list }: { list: ListItem[] }) {
   useEffect(() => {
     list.forEach((listItem: ListItem) => {
       if (
-        ('path' in listItem && pathname === listItem.path) ||
-        ('slug' in listItem && searchParams.get('sort') === listItem.slug)
+        'slug' in listItem &&
+        (searchParams.get('sort') === listItem.slug || pathname === `/search/${listItem.slug}`)
       ) {
         setActive(listItem.name);
       }

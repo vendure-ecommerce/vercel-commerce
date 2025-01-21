@@ -4,6 +4,7 @@ import { revalidateTag } from 'next/cache';
 import { cookies, headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import {
+  getCollectionFacetValuesQuery,
   getCollectionProductsQuery,
   getCollectionQuery,
   getCollectionsQuery
@@ -17,11 +18,16 @@ import {
   AdjustOrderLineMutation,
   AdjustOrderLineMutationVariables,
   CollectionsQuery,
+  FacetValueFilterInput,
   GetActiveChannelQuery,
+  GetCollectionFacetValuesQuery,
+  GetCollectionFacetValuesQueryVariables,
   GetCollectionProductsQuery,
   GetCollectionProductsQueryVariables,
   GetCollectionQuery,
-  GetCollectionQueryVariables,
+  GetCollectionQueryVariables, GetCollectionsQuery, GetCollectionsQueryVariables,
+  GetFacetsQuery,
+  GetFacetsQueryVariables,
   GetProductQuery,
   GetProductQueryVariables,
   GetProductsQuery,
@@ -37,6 +43,7 @@ import {
 import { DocumentNode } from 'graphql';
 import { getActiveOrderQuery } from './queries/active-order';
 import { getActiveChannelQuery } from './queries/active-channel';
+import { getFacetsQuery } from './queries/facets';
 
 const endpoint = process.env.VENDURE_ENDPOINT || 'http://localhost:3000/shop-api';
 
@@ -193,17 +200,20 @@ export async function getCollection(handle: string) {
 export async function getCollectionProducts({
   collection,
   sortKey,
-  direction
+  direction,
+  facetValueFilters
 }: {
   collection: string;
   sortKey?: string;
   direction?: 'ASC' | 'DESC';
+  facetValueFilters?: Array<FacetValueFilterInput>;
 }) {
   const res = await vendureFetch<GetCollectionProductsQuery, GetCollectionProductsQueryVariables>({
     query: getCollectionProductsQuery,
     tags: [TAGS.collections, TAGS.products],
     variables: {
       slug: collection,
+      facetValueFilters,
       sortKey: {
         [sortKey || 'name']: direction || 'ASC'
       }
@@ -213,6 +223,32 @@ export async function getCollectionProducts({
   return res.body.search.items;
 }
 
+export async function getCollectionFacetValues({
+  collection,
+  sortKey,
+  direction
+}: {
+  collection: string;
+  sortKey?: string;
+  direction?: 'ASC' | 'DESC';
+}) {
+  const res = await vendureFetch<
+    GetCollectionFacetValuesQuery,
+    GetCollectionFacetValuesQueryVariables
+  >({
+    query: getCollectionFacetValuesQuery,
+    tags: [TAGS.collections, TAGS.products, TAGS.facets],
+    variables: {
+      slug: collection,
+      sortKey: {
+        [sortKey || 'name']: direction || 'ASC'
+      }
+    }
+  });
+
+  return res.body.search.facetValues.map((item) => item.facetValue);
+}
+
 export async function getCollections({
   topLevelOnly = false,
   parentId
@@ -220,7 +256,7 @@ export async function getCollections({
   topLevelOnly?: boolean;
   parentId?: string;
 } = {}) {
-  const res = await vendureFetch<CollectionsQuery>({
+  const res = await vendureFetch<GetCollectionsQuery, GetCollectionsQueryVariables>({
     query: getCollectionsQuery,
     tags: [TAGS.collections],
     variables: {
@@ -229,10 +265,16 @@ export async function getCollections({
     }
   });
 
-  return res.body.collections.items.map((item) => ({
-    ...item,
-    path: `/search/${item.slug}`
-  }));
+  return res.body.collections.items
+}
+
+export async function getFacets() {
+  const res = await vendureFetch<GetFacetsQuery, GetFacetsQueryVariables>({
+    query: getFacetsQuery,
+    tags: [TAGS.facets]
+  });
+
+  return res.body.facets.items;
 }
 
 export async function getMenu() {
@@ -279,7 +321,7 @@ export async function getProducts({
   return res.body.search.items;
 }
 
-export async function getPage(slug: string){
+export async function getPage(slug: string) {
   // TODO: Implement with custom entity
   return undefined;
 }

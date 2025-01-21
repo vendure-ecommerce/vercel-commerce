@@ -10,8 +10,9 @@ import type { ListItem, PathFilterItem } from '.';
 function PathFilterItem({ item }: { item: PathFilterItem }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const active = pathname === item.path;
-  const newParams = new URLSearchParams(searchParams.toString());
+  const path = `/search/${item.slug}`;
+  const active = pathname === path;
+  const newParams = new URLSearchParams();
   const DynamicTag = active ? 'p' : Link;
 
   newParams.delete('q');
@@ -19,12 +20,12 @@ function PathFilterItem({ item }: { item: PathFilterItem }) {
   return (
     <li className="mt-2 flex text-black dark:text-white" key={item.slug}>
       <DynamicTag
-        href={createUrl(item.path, newParams)}
+        href={createUrl(path, newParams)}
         className={clsx(
           'w-full text-sm underline-offset-4 hover:underline dark:hover:text-neutral-100',
           {
             'underline underline-offset-4': active,
-            'pl-4': item.parentId !== "1"
+            'pl-4': item.parentId !== '1'
           }
         )}
       >
@@ -64,5 +65,5 @@ function SortFilterItem({ item }: { item: SortFilterItem }) {
 }
 
 export function FilterItem({ item }: { item: ListItem }) {
-  return 'path' in item ? <PathFilterItem item={item} /> : <SortFilterItem item={item} />;
+  return 'sortKey' in item ? <SortFilterItem item={item} /> : <PathFilterItem item={item} />;
 }

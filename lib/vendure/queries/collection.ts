@@ -1,19 +1,20 @@
 import gql from 'graphql-tag';
 import searchResultFragment from '../fragments/search-result';
+import { facetValueFragment } from '../fragments/facet';
 
 const collectionFragment = gql`
-    fragment collection on Collection {
-        id
-        slug
-        name
-        description
-        updatedAt
-        parentId
-        customFields {
-            seoTitle
-            seoDescription
-        }
+  fragment collection on Collection {
+    id
+    slug
+    name
+    description
+    updatedAt
+    parentId
+    customFields {
+      seoTitle
+      seoDescription
     }
+  }
 `;
 
 export const getCollectionQuery = gql`
@@ -26,24 +27,39 @@ export const getCollectionQuery = gql`
 `;
 
 export const getCollectionsQuery = gql`
-    query getCollections($topLevelOnly: Boolean, $filter: CollectionFilterParameter) {
-        collections(options: { topLevelOnly: $topLevelOnly, filter: $filter, take: 100, sort: { name: DESC } }) {
-            items {
-                ...collection
-            }
-        }
+  query getCollections($topLevelOnly: Boolean, $filter: CollectionFilterParameter) {
+    collections(
+      options: { topLevelOnly: $topLevelOnly, filter: $filter, take: 100, sort: { name: DESC } }
+    ) {
+      items {
+        ...collection
+      }
     }
-    ${collectionFragment}
+  }
+  ${collectionFragment}
 `;
 
 export const getCollectionProductsQuery = gql`
-  query getCollectionProducts($slug: String!, $sortKey: SearchResultSortParameter) {
+    query getCollectionProducts($slug: String!, $sortKey: SearchResultSortParameter, $facetValueFilters: [FacetValueFilterInput!]) {
+        search(input: { groupByProduct: true, collectionSlug: $slug, sort: $sortKey, facetValueFilters: $facetValueFilters }) {
+            items {
+                ...searchResult
+            }
+            totalItems
+        }
+    }
+    ${searchResultFragment}
+`;
+
+export const getCollectionFacetValuesQuery = gql`
+  query getCollectionFacetValues($slug: String!, $sortKey: SearchResultSortParameter) {
     search(input: { groupByProduct: true, collectionSlug: $slug, sort: $sortKey }) {
-      items {
-        ...searchResult
+      facetValues {
+        facetValue {
+          ...facet_value
+        }
       }
-      totalItems
     }
   }
-  ${searchResultFragment}
+  ${facetValueFragment}
 `;

@@ -6,6 +6,22 @@ import FilterList from './filter';
 
 async function CollectionList() {
   const collections = await getCollections();
+
+
+  // Create a map of collections by their id
+  const collectionMap = new Map(collections.map(collection => [collection.id, collection]));
+
+  // Sort collections based on parentId
+  collections.sort((a, b) => {
+    if (a.parentId === b.id) {
+      return 1;
+    }
+    if (b.parentId === a.id) {
+      return -1;
+    }
+    return 0;
+  });
+
   return <FilterList list={collections} title="Collections" />;
 }
 
