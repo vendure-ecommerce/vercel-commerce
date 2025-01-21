@@ -25,7 +25,9 @@ import {
   GetCollectionProductsQuery,
   GetCollectionProductsQueryVariables,
   GetCollectionQuery,
-  GetCollectionQueryVariables, GetCollectionsQuery, GetCollectionsQueryVariables,
+  GetCollectionQueryVariables,
+  GetCollectionsQuery,
+  GetCollectionsQueryVariables,
   GetFacetsQuery,
   GetFacetsQueryVariables,
   GetProductQuery,
@@ -261,11 +263,11 @@ export async function getCollections({
     tags: [TAGS.collections],
     variables: {
       topLevelOnly,
-      ...(parentId && { filter: { parent: { eq: parentId } } })
+      ...(parentId && { filter: { parentId: { eq: parentId } } })
     }
   });
 
-  return res.body.collections.items
+  return res.body.collections.items;
 }
 
 export async function getFacets() {
@@ -328,16 +330,15 @@ export async function getPage(slug: string) {
 
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.
 export async function revalidate(req: NextRequest): Promise<NextResponse> {
-  // We always need to respond with a 200 status code to Shopify,
-  // otherwise it will continue to retry the request.
   const collectionWebhooks = ['collections/create', 'collections/delete', 'collections/update'];
   const productWebhooks = ['products/create', 'products/delete', 'products/update'];
-  const topic = (await headers()).get('x-shopify-topic') || 'unknown';
+  // TODO: Implement webhooks in Vendure repo
+  const topic = 'unknown';
   const secret = req.nextUrl.searchParams.get('secret');
   const isCollectionUpdate = collectionWebhooks.includes(topic);
   const isProductUpdate = productWebhooks.includes(topic);
 
-  if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
+  if (!secret || secret !== process.env.VENDURE_REVALIDATION_SECRET) {
     console.error('Invalid revalidation secret.');
     return NextResponse.json({ status: 401 });
   }
