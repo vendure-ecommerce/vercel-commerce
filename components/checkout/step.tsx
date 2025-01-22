@@ -3,9 +3,8 @@
 import { getCheckoutSteps } from '@/lib/vendure/checkout';
 import Link from 'next/link';
 import { cn } from '@/ui-components/lib/utils';
-import { Circle } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { FaCircle, FaRegCircle, FaRegCircleCheck, FaRegCircleDot } from 'react-icons/fa6';
+import { FaRegCircle, FaRegCircleCheck, FaRegCircleDot } from 'react-icons/fa6';
 
 export function CheckoutSteps() {
   const pathname = usePathname();
@@ -19,6 +18,7 @@ export function CheckoutSteps() {
           const stepPathname = `/checkout/${step.identifier}`;
           return (
             <Link
+              key={`step-${step.identifier}`}
               href={stepPathname}
               className={cn({
                 'z-10 flex items-center bg-neutral-50 p-4 first:ps-0 last:pe-0': true,
