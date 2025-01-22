@@ -1,16 +1,18 @@
 import CartModal from 'components/cart/modal';
 import LogoSquare from 'components/logo-square';
-import { getMenu } from 'lib/vendure';
+import { getActiveCustomer, getMenu } from 'lib/vendure';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import MobileMenu from './mobile-menu';
 import Search, { SearchSkeleton } from './search';
 import OpenSignIn from '@/components/account/open-sign-in';
+import { UserDropdown } from '@/components/account/user-dropdown';
 
 const { SITE_NAME } = process.env;
 
 export async function Navbar() {
   const menu = await getMenu();
+  const activeCustomer = await getActiveCustomer();
 
   return (
     <nav className="relative flex items-center justify-between p-4 lg:px-6">
@@ -53,7 +55,7 @@ export async function Navbar() {
           </Suspense>
         </div>
         <div className="flex justify-end gap-2 md:w-1/3">
-          <OpenSignIn />
+          {activeCustomer ? <UserDropdown customer={activeCustomer} /> : <OpenSignIn />}
           <CartModal />
         </div>
       </div>

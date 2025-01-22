@@ -22,6 +22,8 @@ import {
   CollectionsQuery,
   FacetValueFilterInput,
   GetActiveChannelQuery,
+  GetActiveCustomerQuery,
+  GetActiveCustomerQueryVariables,
   GetCollectionFacetValuesQuery,
   GetCollectionFacetValuesQueryVariables,
   GetCollectionProductsQuery,
@@ -49,6 +51,7 @@ import { getActiveOrderQuery } from './queries/active-order';
 import { getActiveChannelQuery } from './queries/active-channel';
 import { getFacetsQuery } from './queries/facets';
 import { authenticate } from '@/lib/vendure/mutations/customer';
+import { getActiveCustomerQuery } from '@/lib/vendure/queries/active-customer';
 
 const endpoint = process.env.VENDURE_ENDPOINT || 'http://localhost:3000/shop-api';
 
@@ -343,6 +346,16 @@ export async function authenticateCustomer(username: string, password: string) {
   await updateAuthCookie(res.headers);
 
   return res.body.authenticate;
+}
+
+export async function getActiveCustomer() {
+  const res = await vendureFetch<GetActiveCustomerQuery, GetActiveCustomerQueryVariables>({
+    query: getActiveCustomerQuery,
+    tags: [TAGS.customer],
+    headers: await getAuthHeaders()
+  });
+
+  return res.body.activeCustomer;
 }
 
 export async function getPage(slug: string) {

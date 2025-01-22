@@ -16,6 +16,7 @@ import { LoaderButton } from '@/components/loader-button';
 import { signIn, SignInState } from '@/components/account/actions';
 import { useActionState, useEffect, useTransition } from 'react';
 import { useToast } from '@/ui-components/hooks/use-toast';
+import {useRouter} from "next/navigation";
 
 const formSchema = z.object({
   username: z.string().min(3),
@@ -26,6 +27,7 @@ type FormSchema = z.infer<typeof formSchema>;
 
 export function SignInForm() {
   const { toast } = useToast();
+  const router = useRouter()
   const form = useForm<FormSchema>({
     mode: 'all',
     resolver: zodResolver(formSchema)
@@ -46,6 +48,7 @@ export function SignInForm() {
         title: 'Success',
         description: 'Welcome back!'
       });
+      router.replace('/')
     }
   }, [state]);
 
