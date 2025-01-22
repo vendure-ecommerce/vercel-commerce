@@ -1,3 +1,5 @@
+export const AUTH_COOKIE_KEY = 'vendure-auth-token'
+
 export type SortFilterItem = {
   name: string;
   slug: string | null;
@@ -29,5 +31,6 @@ export const TAGS = {
   products: 'products',
   cart: 'cart',
   channel: 'channel',
-  facets: 'facets'
+  facets: 'facets',
+  customer: 'customer'
 };

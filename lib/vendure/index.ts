@@ -17,6 +17,8 @@ import {
   AddItemToOrderMutationVariables,
   AdjustOrderLineMutation,
   AdjustOrderLineMutationVariables,
+  AuthenticateMutation,
+  AuthenticateMutationVariables,
   CollectionsQuery,
   FacetValueFilterInput,
   GetActiveChannelQuery,
@@ -46,6 +48,7 @@ import { DocumentNode } from 'graphql';
 import { getActiveOrderQuery } from './queries/active-order';
 import { getActiveChannelQuery } from './queries/active-channel';
 import { getFacetsQuery } from './queries/facets';
+import { authenticate } from '@/lib/vendure/mutations/customer';
 
 const endpoint = process.env.VENDURE_ENDPOINT || 'http://localhost:3000/shop-api';
 
@@ -321,6 +324,25 @@ export async function getProducts({
   });
 
   return res.body.search.items;
+}
+
+export async function authenticateCustomer(username: string, password: string) {
+  const res = await vendureFetch<AuthenticateMutation, AuthenticateMutationVariables>({
+    query: authenticate,
+    tags: [TAGS.customer],
+    variables: {
+      input: {
+        native: {
+          username,
+          password
+        }
+      }
+    }
+  });
+
+  await updateAuthCookie(res.headers);
+
+  return res.body.authenticate;
 }
 
 export async function getPage(slug: string) {

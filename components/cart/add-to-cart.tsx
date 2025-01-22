@@ -26,8 +26,7 @@ function SubmitButton({
       </button>
     );
   }
-
-  console.log(selectedVariantId);
+  
   if (!selectedVariantId) {
     return (
       <button
