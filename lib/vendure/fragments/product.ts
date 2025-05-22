@@ -35,36 +35,33 @@ const productOptionGroupFragment = gql`
 `;
 
 const productFragment = gql`
-    fragment product on Product {
-        __typename
-        id
-        slug
-        enabled
-        name
-        description
-        priceRange {
-            min
-            max
-        }
-        optionGroups {
-            ...product_option_group
-        }
-        variantList(options: { take: 100 }) {
-            items {
-                ...variant
-            }
-        }
-        featuredAsset {
-            ...image
-        }
-        assets {
-            ...image
-        }
-        updatedAt
+  fragment product on Product {
+    __typename
+    id
+    slug
+    enabled
+    name
+    description
+    # Remove priceRange field
+    optionGroups {
+      ...product_option_group
     }
-    ${assetFragment}
-    ${variantFragment}
-    ${productOptionGroupFragment}
+    variantList(options: { take: 100 }) {
+      items {
+        ...variant
+      }
+    }
+    featuredAsset {
+      ...image
+    }
+    assets {
+      ...image
+    }
+    updatedAt
+  }
+  ${assetFragment}
+  ${variantFragment}
+  ${productOptionGroupFragment}
 `;
 
 export default productFragment;
