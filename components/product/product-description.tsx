@@ -1,12 +1,21 @@
 import { AddToCart } from 'components/cart/add-to-cart';
-import Price from 'components/price';
 import Prose from 'components/prose';
 import { ProductFragment } from 'lib/vendure/types';
-import { VariantSelector } from './variant-selector';
 import { getActiveChannel } from '../../lib/vendure';
+import Price from '../price';
+import { VariantSelector } from './variant-selector';
 
 export async function ProductDescription({ product }: { product: ProductFragment }) {
-  const fromPrice = product.priceRange.min;
+  /**
+   * This should be calculated on the server side, currently it's a temporary fix to get the price
+   */
+  const fromPrice =
+    product.variantList?.items?.length > 0
+      ? Math.min(
+          ...product.variantList.items.map((variant) => variant.priceWithTax || variant.price || 0)
+        )
+      : null;
+
   const activeChannel = await getActiveChannel();
 
   return (
