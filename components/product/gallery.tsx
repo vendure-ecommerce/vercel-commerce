@@ -1,8 +1,8 @@
 'use client';
 
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { GridTileImage } from 'components/grid/tile';
 import { useProduct, useUpdateURL } from 'components/product/product-context';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
 export function Gallery({ images }: { images: { src: string; altText: string }[] }) {
@@ -41,7 +41,7 @@ export function Gallery({ images }: { images: { src: string; altText: string }[]
                 aria-label="Previous product image"
                 className={buttonClassName}
               >
-                <ArrowLeftIcon className="h-5" />
+                <ChevronLeft className="h-5" />
               </button>
               <div className="mx-1 h-6 w-px bg-neutral-500"></div>
               <button
@@ -52,7 +52,7 @@ export function Gallery({ images }: { images: { src: string; altText: string }[]
                 aria-label="Next product image"
                 className={buttonClassName}
               >
-                <ArrowRightIcon className="h-5" />
+                <ChevronRight className="h-5" />
               </button>
             </div>
           </div>

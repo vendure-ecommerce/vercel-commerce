@@ -1,14 +1,8 @@
 'use client';
 
-import clsx from 'clsx';
+import { cn } from '@/ui-components/lib/utils';
 import { useProduct, useUpdateURL } from 'components/product/product-context';
-import {
-  Product_Option_GroupFragment,
-  ProductOption,
-  ProductOptionGroup,
-  ProductVariant,
-  VariantFragment
-} from 'lib/vendure/types';
+import { Product_Option_GroupFragment, VariantFragment } from 'lib/vendure/types';
 
 type Combination = {
   id: string;
@@ -77,7 +71,7 @@ export function VariantSelector({
                 aria-disabled={!isAvailableForSale}
                 disabled={!isAvailableForSale}
                 title={`${optionGroup.name} ${value}${!isAvailableForSale ? ' (Out of Stock)' : ''}`}
-                className={clsx(
+                className={cn(
                   'flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-2 py-1 text-sm dark:border-neutral-800 dark:bg-neutral-900',
                   {
                     'cursor-default ring-2 ring-blue-600': isActive,

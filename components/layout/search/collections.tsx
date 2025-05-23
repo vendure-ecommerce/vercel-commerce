@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/ui-components/lib/utils';
 import { Suspense } from 'react';
 
 import { getCollections } from 'lib/vendure';
@@ -7,9 +7,8 @@ import FilterList from './filter';
 async function CollectionList() {
   const collections = await getCollections();
 
-
   // Create a map of collections by their id
-  const collectionMap = new Map(collections.map(collection => [collection.id, collection]));
+  const collectionMap = new Map(collections.map((collection) => [collection.id, collection]));
 
   // Sort collections based on parentId
   collections.sort((a, b) => {
@@ -34,16 +33,16 @@ export default function Collections() {
     <Suspense
       fallback={
         <div className="col-span-2 hidden h-[400px] w-full flex-none py-4 lg:block">
-          <div className={clsx(skeleton, activeAndTitles)} />
-          <div className={clsx(skeleton, activeAndTitles)} />
-          <div className={clsx(skeleton, items)} />
-          <div className={clsx(skeleton, items)} />
-          <div className={clsx(skeleton, items)} />
-          <div className={clsx(skeleton, items)} />
-          <div className={clsx(skeleton, items)} />
-          <div className={clsx(skeleton, items)} />
-          <div className={clsx(skeleton, items)} />
-          <div className={clsx(skeleton, items)} />
+          <div className={cn(skeleton, activeAndTitles)} />
+          <div className={cn(skeleton, activeAndTitles)} />
+          <div className={cn(skeleton, items)} />
+          <div className={cn(skeleton, items)} />
+          <div className={cn(skeleton, items)} />
+          <div className={cn(skeleton, items)} />
+          <div className={cn(skeleton, items)} />
+          <div className={cn(skeleton, items)} />
+          <div className={cn(skeleton, items)} />
+          <div className={cn(skeleton, items)} />
         </div>
       }
     >

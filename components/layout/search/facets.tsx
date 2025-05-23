@@ -1,8 +1,8 @@
-import clsx from 'clsx';
-import { Suspense } from 'react';
-import { getCollectionFacetValues, getFacets } from '@/lib/vendure';
-import FacetsFilter from './facets-filter';
+import { getCollectionFacetValues } from '@/lib/vendure';
 import { FacetFragment } from '@/lib/vendure/types';
+import { cn } from '@/ui-components/lib/utils';
+import { Suspense } from 'react';
+import FacetsFilter from './facets-filter';
 
 const skeleton = 'h-10 w-full animate-pulse rounded';
 const items = 'bg-neutral-400 dark:bg-neutral-700';
@@ -23,11 +23,11 @@ export default function Facets({
   return (
     <Suspense
       fallback={
-        <div className="gap-4 hidden w-full py-4 lg:flex">
-          <div className={clsx(skeleton, items)} />
-          <div className={clsx(skeleton, items)} />
-          <div className={clsx(skeleton, items)} />
-          <div className={clsx(skeleton, items)} />
+        <div className="hidden w-full gap-4 py-4 lg:flex">
+          <div className={cn(skeleton, items)} />
+          <div className={cn(skeleton, items)} />
+          <div className={cn(skeleton, items)} />
+          <div className={cn(skeleton, items)} />
         </div>
       }
     >

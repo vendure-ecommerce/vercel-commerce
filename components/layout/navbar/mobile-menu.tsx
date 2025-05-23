@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Fragment, Suspense, useEffect, useState } from 'react';
 
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import Search, { SearchSkeleton } from './search';
+import { Menu, X } from 'lucide-react';
 import { CollectionsQuery } from '../../../lib/vendure/types';
+import Search, { SearchSkeleton } from './search';
 
 export default function MobileMenu({ menu }: { menu: CollectionsQuery['collections']['items'] }) {
   const pathname = usePathname();
@@ -35,9 +35,9 @@ export default function MobileMenu({ menu }: { menu: CollectionsQuery['collectio
       <button
         onClick={openMobileMenu}
         aria-label="Open mobile menu"
-        className="flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors md:hidden dark:border-neutral-700 dark:text-white"
+        className="flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:text-white md:hidden"
       >
-        <Bars3Icon className="h-4" />
+        <Menu className="h-4" />
       </button>
       <Transition show={isOpen}>
         <Dialog onClose={closeMobileMenu} className="relative z-50">
@@ -68,7 +68,7 @@ export default function MobileMenu({ menu }: { menu: CollectionsQuery['collectio
                   onClick={closeMobileMenu}
                   aria-label="Close mobile menu"
                 >
-                  <XMarkIcon className="h-6" />
+                  <X className="h-6" />
                 </button>
 
                 <div className="mb-4 w-full">

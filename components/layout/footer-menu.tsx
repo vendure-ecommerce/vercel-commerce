@@ -1,7 +1,7 @@
 'use client';
 
-import clsx from 'clsx';
-import {CollectionsQuery} from 'lib/vendure/types';
+import { cn } from '@/ui-components/lib/utils';
+import { CollectionsQuery } from 'lib/vendure/types';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -18,8 +18,8 @@ export function FooterMenuItem({ item }: { item: CollectionsQuery['collections']
     <li>
       <Link
         href={item.slug}
-        className={clsx(
-          'block p-2 text-lg underline-offset-4 hover:text-black hover:underline md:inline-block md:text-sm dark:hover:text-neutral-300',
+        className={cn(
+          'block p-2 text-lg underline-offset-4 hover:text-black hover:underline dark:hover:text-neutral-300 md:inline-block md:text-sm',
           {
             'text-black dark:text-neutral-300': active
           }
@@ -37,7 +37,7 @@ export default function FooterMenu({ menu }: { menu: CollectionsQuery['collectio
   return (
     <nav>
       <ul>
-        {menu.map(item => {
+        {menu.map((item) => {
           return <FooterMenuItem key={item.slug} item={item} />;
         })}
       </ul>

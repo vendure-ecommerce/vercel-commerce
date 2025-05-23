@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/ui-components/lib/utils';
 
 export default function LogoIcon(props: React.ComponentProps<'svg'>) {
   return (
@@ -8,7 +8,7 @@ export default function LogoIcon(props: React.ComponentProps<'svg'>) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 183 124"
       {...props}
-      className={clsx('h-4 w-4 fill-black dark:fill-white', props.className)}
+      className={cn('h-4 w-4 fill-black dark:fill-white', props.className)}
     >
       <g clipPath="url(#a)">
         <path d="M49.214 56.05v43.237c0 .776.423 1.509 1.085 1.889l38.5 22.232a4.488 4.488 0 0 0 4.455 0l38.5-22.232a2.183 2.183 0 0 0 1.085-1.889V56.051c0-1.678-1.819-2.735-3.271-1.89L93.254 75.126a4.485 4.485 0 0 1-4.455 0L52.484 54.162c-1.452-.846-3.27.211-3.27 1.889Z" />

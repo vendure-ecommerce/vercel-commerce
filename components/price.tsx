@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/ui-components/lib/utils';
 
 const Price = ({
   amount,
@@ -6,7 +6,7 @@ const Price = ({
   currencyCode = 'USD',
   currencyCodeClassName
 }: {
-  amount: string |number;
+  amount: string | number;
   className?: string;
   currencyCode: string;
   currencyCodeClassName?: string;
@@ -17,7 +17,7 @@ const Price = ({
       currency: currencyCode,
       currencyDisplay: 'narrowSymbol'
     }).format(parseFloat(String(amount)) / 100)}`}
-    <span className={clsx('ml-1 inline', currencyCodeClassName)}>{`${currencyCode}`}</span>
+    <span className={cn('ml-1 inline', currencyCodeClassName)}>{`${currencyCode}`}</span>
   </p>
 );
 

@@ -1,6 +1,6 @@
-import { ComponentProps } from 'react';
 import { Button } from '@/ui-components/ui/button';
-import { CgSpinner } from 'react-icons/cg';
+import { LoaderCircle } from 'lucide-react';
+import { ComponentProps } from 'react';
 
 type LoaderButtonProps = {
   loading?: boolean;
@@ -13,7 +13,7 @@ export function LoaderButton({
 }: LoaderButtonProps & ComponentProps<typeof Button>) {
   return (
     <Button {...props} disabled={loading}>
-      {loading ? <CgSpinner /> : children}
+      {loading ? <LoaderCircle className="animate-spin" /> : children}
     </Button>
   );
 }

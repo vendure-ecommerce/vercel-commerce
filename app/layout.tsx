@@ -1,15 +1,15 @@
+import { ToastProvider } from '@/ui-components/ui/toast';
+import { Toaster } from '@/ui-components/ui/toaster';
 import { CartProvider } from 'components/cart/cart-context';
 import { Navbar } from 'components/layout/navbar';
 import { WelcomeToast } from 'components/welcome-toast';
 import { GeistSans } from 'geist/font/sans';
-import { getActiveChannel, getActiveOrder } from 'lib/vendure';
 import { ensureStartsWith } from 'lib/utils';
+import { getActiveChannel, getActiveOrder } from 'lib/vendure';
 import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
-import './globals.css';
 import { ChannelProvider } from '../components/cart/channel-context';
-import { Toaster } from '@/ui-components/ui/toaster';
-import { ToastProvider } from '@/ui-components/ui/toast';
+import './globals.css';
 
 const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL

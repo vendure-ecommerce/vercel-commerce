@@ -1,12 +1,11 @@
 'use client';
 
-import { PlusIcon } from '@heroicons/react/24/outline';
-import clsx from 'clsx';
+import { cn } from '@/ui-components/lib/utils';
 import { addItem } from 'components/cart/actions';
 import { useProduct } from 'components/product/product-context';
-import { GetProductQuery, Product, ProductFragment, ProductVariant } from 'lib/vendure/types';
+import { ProductFragment } from 'lib/vendure/types';
+import { Plus } from 'lucide-react';
 import { useActionState } from 'react';
-import { useCart } from './cart-context';
 
 function SubmitButton({
   availableForSale,
@@ -21,21 +20,21 @@ function SubmitButton({
 
   if (!availableForSale) {
     return (
-      <button disabled className={clsx(buttonClasses, disabledClasses)}>
+      <button disabled className={cn(buttonClasses, disabledClasses)}>
         Out Of Stock
       </button>
     );
   }
-  
+
   if (!selectedVariantId) {
     return (
       <button
         aria-label="Please select an option"
         disabled
-        className={clsx(buttonClasses, disabledClasses)}
+        className={cn(buttonClasses, disabledClasses)}
       >
         <div className="absolute left-0 ml-4">
-          <PlusIcon className="h-5" />
+          <Plus className="h-5" />
         </div>
         Add To Cart
       </button>
@@ -45,12 +44,12 @@ function SubmitButton({
   return (
     <button
       aria-label="Add to cart"
-      className={clsx(buttonClasses, {
+      className={cn(buttonClasses, {
         'hover:opacity-90': true
       })}
     >
       <div className="absolute left-0 ml-4">
-        <PlusIcon className="h-5" />
+        <Plus className="h-5" />
       </div>
       Add To Cart
     </button>
