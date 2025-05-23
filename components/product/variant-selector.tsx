@@ -1,15 +1,8 @@
 'use client';
 
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { useProduct, useUpdateURL } from 'components/product/product-context';
-import {
-  Product_Option_GroupFragment,
-  ProductOption,
-  ProductOptionGroup,
-  ProductVariant,
-  VariantFragment
-} from 'lib/vendure/types';
-
+import { Product_Option_GroupFragment, VariantFragment } from 'lib/vendure/types';
 type Combination = {
   id: string;
   availableForSale: boolean;
@@ -44,7 +37,7 @@ export function VariantSelector({
   return optionGroups.map((optionGroup) => (
     <form key={optionGroup.id}>
       <dl className="mb-8">
-        <dt className="mb-4 text-sm uppercase tracking-wide">{optionGroup.name}</dt>
+        <dt className="mb-4 text-sm tracking-wide uppercase">{optionGroup.name}</dt>
         <dd className="flex flex-wrap gap-3">
           {optionGroup.options.map((value) => {
             // Base option params on current selectedOptions so we can preserve any other param state.
@@ -77,8 +70,8 @@ export function VariantSelector({
                 aria-disabled={!isAvailableForSale}
                 disabled={!isAvailableForSale}
                 title={`${optionGroup.name} ${value}${!isAvailableForSale ? ' (Out of Stock)' : ''}`}
-                className={clsx(
-                  'flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-2 py-1 text-sm dark:border-neutral-800 dark:bg-neutral-900',
+                className={cn(
+                  'border-border flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-2 py-1 text-sm dark:bg-neutral-900',
                   {
                     'cursor-default ring-2 ring-blue-600': isActive,
                     'ring-1 ring-transparent transition duration-300 ease-in-out hover:ring-blue-600':

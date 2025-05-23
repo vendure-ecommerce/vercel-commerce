@@ -1,4 +1,6 @@
+import fs from 'fs';
 import { ImageResponse } from 'next/og';
+import path from 'path';
 import LogoIcon from './icons/logo';
 
 export type Props = {
@@ -12,6 +14,9 @@ export default async function OpengraphImage(props?: Props): Promise<ImageRespon
     },
     ...props
   };
+
+  const fontPath = path.join(process.cwd(), 'app/fonts/Inter-Bold.ttf');
+  const fontData = fs.readFileSync(fontPath);
 
   return new ImageResponse(
     (
@@ -28,9 +33,7 @@ export default async function OpengraphImage(props?: Props): Promise<ImageRespon
       fonts: [
         {
           name: 'Inter',
-          data: await fetch(new URL('../fonts/Inter-Bold.ttf', import.meta.url)).then((res) =>
-            res.arrayBuffer()
-          ),
+          data: fontData,
           style: 'normal',
           weight: 700
         }

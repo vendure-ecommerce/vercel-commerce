@@ -1,15 +1,16 @@
+import { Product } from '@/lib/vendure/types';
+import { getActiveChannel, getProduct } from 'lib/vendure';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
+/** Components */
 import { GridTileImage } from 'components/grid/tile';
-import Footer from 'components/layout/footer';
+import { Footer } from 'components/layout/footer';
 import { Gallery } from 'components/product/gallery';
 import { ProductProvider } from 'components/product/product-context';
 import { ProductDescription } from 'components/product/product-description';
-import { getActiveChannel, getProduct } from 'lib/vendure';
-import Link from 'next/link';
-import { Suspense } from 'react';
-import { Product } from '../../../lib/vendure/types';
 
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;
@@ -81,7 +82,7 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
         }}
       />
       <div className="mx-auto max-w-screen-2xl px-4">
-        <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8 dark:border-neutral-800 dark:bg-black">
+        <div className="border-border flex flex-col rounded-lg border bg-white p-8 md:p-12 lg:flex-row lg:gap-8 dark:bg-black">
           <div className="h-full w-full basis-full lg:basis-4/6">
             <Suspense
               fallback={

@@ -1,4 +1,4 @@
-import seoFragment from '../fragments/seo';
+// import seoFragment from '../fragments/seo';
 
 // TODO: needs extension in Vendure
 // const pageFragment = /* GraphQL */ `

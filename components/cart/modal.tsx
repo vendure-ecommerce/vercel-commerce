@@ -1,10 +1,10 @@
 'use client';
 
 import { Dialog, Transition } from '@headlessui/react';
-import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import LoadingDots from 'components/loading-dots';
 import Price from 'components/price';
 import { createUrl } from 'lib/utils';
+import { ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment, useEffect, useRef, useState } from 'react';
@@ -67,7 +67,7 @@ export default function CartModal() {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] dark:border-neutral-700 dark:bg-black/80 dark:text-white">
+            <Dialog.Panel className="border-border fixed top-0 right-0 bottom-0 flex h-full w-full flex-col border-l bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] dark:bg-black/80 dark:text-white">
               <div className="flex items-center justify-between">
                 <p className="text-lg font-semibold">My Cart</p>
                 <button aria-label="Close cart" onClick={closeCart}>
@@ -77,7 +77,7 @@ export default function CartModal() {
 
               {!cart || cart.lines.length === 0 ? (
                 <div className="mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
-                  <ShoppingCartIcon className="h-16" />
+                  <ShoppingCart className="h-16" />
                   <p className="mt-6 text-center text-2xl font-bold">Your cart is empty.</p>
                 </div>
               ) : (
@@ -101,7 +101,7 @@ export default function CartModal() {
                           className="flex w-full flex-col border-b border-neutral-300 dark:border-neutral-700"
                         >
                           <div className="relative flex w-full flex-row justify-between px-1 py-4">
-                            <div className="absolute z-40 -ml-1 -mt-2">
+                            <div className="absolute z-40 -mt-2 -ml-1">
                               <DeleteItemButton item={item} />
                             </div>
                             <div className="flex flex-row">
@@ -163,11 +163,11 @@ export default function CartModal() {
                         currencyCode={cart.currencyCode}
                       />
                     </div>
-                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
+                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pt-1 pb-1 dark:border-neutral-700">
                       <p>Shipping</p>
                       <p className="text-right">Calculated at checkout</p>
                     </div>
-                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
+                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pt-1 pb-1 dark:border-neutral-700">
                       <p>Total</p>
                       <Price
                         className="text-right text-base text-black dark:text-white"

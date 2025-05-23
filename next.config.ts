@@ -1,4 +1,9 @@
 export default {
+  experimental: {
+    ppr: true,
+    inlineCss: true,
+    useCache: true
+  },
   images: {
     loader: 'custom',
     loaderFile: 'image-loader.js',

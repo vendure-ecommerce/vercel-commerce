@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import searchResultFragment from '../fragments/search-result';
 import { facetValueFragment } from '../fragments/facet';
+import searchResultFragment from '../fragments/search-result';
 
 const collectionFragment = gql`
   fragment collection on Collection {
@@ -10,10 +10,7 @@ const collectionFragment = gql`
     description
     updatedAt
     parentId
-    customFields {
-      seoTitle
-      seoDescription
-    }
+    customFields
   }
 `;
 

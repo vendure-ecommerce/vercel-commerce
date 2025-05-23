@@ -1,5 +1,5 @@
-import productFragment from '../fragments/product';
 import gql from "graphql-tag";
+import productFragment from '../fragments/product';
 import searchResultFragment from "../fragments/search-result";
 
 export const getProductQuery = gql`

@@ -1,7 +1,7 @@
 'use client';
 
-import { createContext, PropsWithChildren, use, useContext } from 'react';
 import { Active_ChannelFragment } from '@/lib/vendure/types';
+import { createContext, PropsWithChildren, use, useContext } from 'react';
 
 const ChannelContext = createContext<Active_ChannelFragment | undefined>(undefined);
 

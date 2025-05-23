@@ -1,9 +1,8 @@
 import { GridTileImage } from 'components/grid/tile';
+import { getSearchResultPrice } from 'lib/utils';
 import { getActiveChannel, getCollectionProducts } from 'lib/vendure';
-import type { Product, SearchResultFragment } from 'lib/vendure/types';
+import type { SearchResultFragment } from 'lib/vendure/types';
 import Link from 'next/link';
-import { useActiveChannel } from '../cart/channel-context';
-import { getSearchResultPrice } from '../../lib/utils';
 
 async function ThreeItemGridItem({
   item,
@@ -45,9 +44,9 @@ async function ThreeItemGridItem({
 }
 
 export async function ThreeItemGrid() {
-  // Collections that start with `hidden-*` are hidden from the search page.
+  /** You can create a custom collection in Vendure to display products on the homepage. */
   const homepageItems = await getCollectionProducts({
-    collection: 'home-page-featured-items'
+    collection: 'electronics'
   });
 
   if (!homepageItems[0] || !homepageItems[1] || !homepageItems[2]) return null;

@@ -1,3 +1,4 @@
+import { SignInForm } from '@/components/account/sign-in-form';
 import {
   Card,
   CardContent,
@@ -5,13 +6,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle
-} from '@/ui-components/ui/card';
+} from '@/components/ui/card';
 import Link from 'next/link';
-import {SignInForm} from "@/components/account/sign-in-form";
 
 export default async function SignIn() {
   return (
-    <section className="flex mt-24 items-center justify-center">
+    <section className="mt-24 flex items-center justify-center">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Sign in</CardTitle>
