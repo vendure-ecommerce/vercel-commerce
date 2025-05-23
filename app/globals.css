@@ -1,24 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}
-
-@supports (font: -apple-system-body) and (-webkit-appearance: none) {
-  img[loading='lazy'] {
-    clip-path: inset(0.6px);
-  }
-}
-
-a,
-input,
-button {
-  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 dark:focus-visible:ring-neutral-600 dark:focus-visible:ring-offset-neutral-900;
-}
+@plugin "@tailwindcss/container-queries";
+@plugin "@tailwindcss/typography";
 
 @layer base {
   :root {
@@ -74,13 +57,30 @@ button {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border);
+  }
 }
 
-@layer base {
-  * {
-    @apply border-border;
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
   }
-  body {
-    @apply bg-background text-foreground;
+}
+
+@supports (font: -apple-system-body) and (-webkit-appearance: none) {
+  img[loading='lazy'] {
+    clip-path: inset(0.6px);
   }
+}
+
+a,
+input,
+button {
+  @apply focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 focus-visible:outline-hidden dark:focus-visible:ring-neutral-600 dark:focus-visible:ring-offset-neutral-900;
 }
