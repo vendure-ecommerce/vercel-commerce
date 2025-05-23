@@ -1,12 +1,13 @@
 import { getActiveChannel, getCollectionProducts } from 'lib/vendure';
 import Link from 'next/link';
-import { GridTileImage } from './grid/tile';
 import { getSearchResultPrice } from '../lib/utils';
+import { GridTileImage } from './grid/tile';
 
 export async function Carousel() {
   const activeChannel = await getActiveChannel();
-  // Collections that start with `hidden-*` are hidden from the search page.
-  const products = await getCollectionProducts({ collection: 'homepage-carousel' });
+
+  /** You can create a custom collection in Vendure to display products on the homepage or you can pass any collection that you want to display. */
+  const products = await getCollectionProducts({ collection: 'sports-outdoor' });
 
   if (!products?.length) return null;
 
@@ -14,7 +15,7 @@ export async function Carousel() {
   const carouselProducts = [...products, ...products, ...products];
 
   return (
-    <div className="w-full overflow-x-auto pb-6 pt-1">
+    <div className="w-full pb-6 pt-1">
       <ul className="flex animate-carousel gap-4">
         {carouselProducts.map((product, i) => (
           <li
