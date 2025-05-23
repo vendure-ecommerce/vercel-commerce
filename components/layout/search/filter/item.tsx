@@ -1,12 +1,11 @@
 'use client';
 
-import { cn } from '@/ui-components/lib/utils';
+import { cn } from '@/lib/utils';
 import type { SortFilterItem } from 'lib/constants';
 import { createUrl } from 'lib/utils';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import type { ListItem, PathFilterItem } from '.';
-
 function PathFilterItem({ item }: { item: PathFilterItem }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();

@@ -1,4 +1,3 @@
-import { Active_CustomerFragment } from '@/lib/vendure/types';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,7 +5,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from '@/ui-components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
+import { Active_CustomerFragment } from '@/lib/vendure/types';
 import { User } from 'lucide-react';
 
 export async function UserDropdown({ customer }: { customer: Active_CustomerFragment }) {

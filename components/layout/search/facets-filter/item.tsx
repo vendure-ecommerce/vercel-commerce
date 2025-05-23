@@ -1,8 +1,8 @@
 'use client';
 
+import { MultiSelect } from '@/components/multi-select';
 import { Facet_ValueFragment, FacetFragment } from '@/lib/vendure/types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { MultiSelect } from '@/ui-components/multi-select';
 import { useMemo } from 'react';
 
 export default function FacetsFilterItem({
@@ -33,7 +33,7 @@ export default function FacetsFilterItem({
   }, [searchParams]);
 
   return (
-    <div className="max-w-[50%] md:max-w-[250px] shrink-0 grow">
+    <div className="max-w-[50%] shrink-0 grow md:max-w-[250px]">
       <h3 className="mb-2 block text-xs text-neutral-500 dark:text-neutral-400">{item.name}</h3>
       <div>
         <MultiSelect

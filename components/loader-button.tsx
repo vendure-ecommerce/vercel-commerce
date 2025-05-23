@@ -1,4 +1,4 @@
-import { Button } from '@/ui-components/ui/button';
+import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
 import { ComponentProps } from 'react';
 

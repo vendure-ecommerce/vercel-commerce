@@ -1,12 +1,11 @@
 'use client';
 
-import { cn } from '@/ui-components/lib/utils';
+import { cn } from '@/lib/utils';
 import { addItem } from 'components/cart/actions';
 import { useProduct } from 'components/product/product-context';
 import { ProductFragment } from 'lib/vendure/types';
 import { Plus } from 'lucide-react';
 import { useActionState } from 'react';
-
 function SubmitButton({
   availableForSale,
   selectedVariantId

@@ -1,4 +1,4 @@
-import { cn } from '@/ui-components/lib/utils';
+import { cn } from '@/lib/utils';
 
 const Price = ({
   amount,

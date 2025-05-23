@@ -1,6 +1,5 @@
-import { cn } from '@/ui-components/lib/utils';
+import { cn } from '@/lib/utils';
 import { Suspense } from 'react';
-
 import { getCollections } from 'lib/vendure';
 import FilterList from './filter';
 

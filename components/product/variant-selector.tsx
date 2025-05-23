@@ -1,9 +1,8 @@
 'use client';
 
-import { cn } from '@/ui-components/lib/utils';
+import { cn } from '@/lib/utils';
 import { useProduct, useUpdateURL } from 'components/product/product-context';
 import { Product_Option_GroupFragment, VariantFragment } from 'lib/vendure/types';
-
 type Combination = {
   id: string;
   availableForSale: boolean;
@@ -38,7 +37,7 @@ export function VariantSelector({
   return optionGroups.map((optionGroup) => (
     <form key={optionGroup.id}>
       <dl className="mb-8">
-        <dt className="mb-4 text-sm uppercase tracking-wide">{optionGroup.name}</dt>
+        <dt className="mb-4 text-sm tracking-wide uppercase">{optionGroup.name}</dt>
         <dd className="flex flex-wrap gap-3">
           {optionGroup.options.map((value) => {
             // Base option params on current selectedOptions so we can preserve any other param state.

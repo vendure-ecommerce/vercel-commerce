@@ -1,4 +1,4 @@
-import { cn } from '@/ui-components/lib/utils';
+import { cn } from '@/lib/utils';
 
 const dots = 'mx-[1px] inline-block h-1 w-1 animate-blink rounded-md';
 

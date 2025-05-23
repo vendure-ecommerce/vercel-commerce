@@ -1,7 +1,6 @@
-import { cn } from '@/ui-components/lib/utils';
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Label from '../label';
-
 export function GridTileImage({
   isInteractive = true,
   active,

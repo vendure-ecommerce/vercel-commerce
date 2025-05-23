@@ -1,8 +1,7 @@
 'use client';
 
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn, SignInState } from '@/components/account/actions';
+import { LoaderButton } from '@/components/loader-button';
 import {
   Form,
   FormControl,
@@ -10,13 +9,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage
-} from '@/ui-components/ui/form';
-import { Input } from '@/ui-components/ui/input';
-import { LoaderButton } from '@/components/loader-button';
-import { signIn, SignInState } from '@/components/account/actions';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { useActionState, useEffect, useTransition } from 'react';
-import { useToast } from '@/ui-components/hooks/use-toast';
-import {useRouter} from "next/navigation";
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 const formSchema = z.object({
   username: z.string().min(3),
@@ -26,8 +26,7 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 export function SignInForm() {
-  const { toast } = useToast();
-  const router = useRouter()
+  const router = useRouter();
   const form = useForm<FormSchema>({
     mode: 'all',
     resolver: zodResolver(formSchema)
@@ -37,18 +36,10 @@ export function SignInForm() {
 
   useEffect(() => {
     if (state?.type === 'error') {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: state.message
-      });
+      toast.error(state.message);
     } else if (state?.type === 'success') {
-      toast({
-        variant: 'default',
-        title: 'Success',
-        description: 'Welcome back!'
-      });
-      router.replace('/')
+      toast.success('Welcome back!');
+      router.replace('/');
     }
   }, [state]);
 

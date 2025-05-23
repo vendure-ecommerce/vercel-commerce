@@ -1,9 +1,8 @@
+import { cn } from '@/lib/utils';
 import { getCollectionFacetValues } from '@/lib/vendure';
 import { FacetFragment } from '@/lib/vendure/types';
-import { cn } from '@/ui-components/lib/utils';
 import { Suspense } from 'react';
 import FacetsFilter from './facets-filter';
-
 const skeleton = 'h-10 w-full animate-pulse rounded';
 const items = 'bg-neutral-400 dark:bg-neutral-700';
 

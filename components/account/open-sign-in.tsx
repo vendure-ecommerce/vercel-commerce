@@ -1,4 +1,4 @@
-import { cn } from '@/ui-components/lib/utils';
+import { cn } from '@/lib/utils';
 import { User } from 'lucide-react';
 import Link from 'next/link';
 
