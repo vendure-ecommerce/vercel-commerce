@@ -12,7 +12,7 @@ A Next.js 15 and App Router-ready ecommerce template, built with [Vendure](https
 - Edge Runtime
 - New fetching and caching paradigms
 - Dynamic OG images
-- Styling with Tailwind CSS
+- Styling with Tailwind CSS and shadcn/ui
 - Automatic light/dark mode based on system settings
 
 <h3 id="v1-note"></h3>
