@@ -8,12 +8,12 @@ export function WelcomeToast() {
     // ignore if screen height is too small
     if (window.innerHeight < 650) return;
     if (!document.cookie.includes('welcome-toast=2')) {
+      // Set the cookie immediately when showing the toast
+      document.cookie = 'welcome-toast=2; max-age=31536000; path=/';
+
       toast('🛍️ Welcome to Next.js Commerce!', {
         id: 'welcome-toast',
-        duration: Infinity,
-        onDismiss: () => {
-          document.cookie = 'welcome-toast=2; max-age=31536000; path=/';
-        },
+        duration: 4000,
         description: (
           <>
             This is a high-performance, SSR storefront powered by Vendure, Next.js, and Vercel.{' '}
