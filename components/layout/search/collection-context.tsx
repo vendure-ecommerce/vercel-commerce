@@ -1,7 +1,7 @@
 'use client';
 
-import { createContext, useContext } from 'react';
 import { CollectionFragment } from '@/lib/vendure/types';
+import { createContext, useContext } from 'react';
 
 const CollectionContext = createContext<CollectionFragment | undefined | null>(undefined);
 

@@ -1,3 +1,3 @@
-import {GetProductQuery} from "../../lib/vendure/types";
+import { GetProductQuery } from '@/lib/vendure/types';
 
-export type VendureProductType = GetProductQuery['product']
+export type VendureProductType = GetProductQuery['product'];

@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
-import { Suspense } from 'react';
 import { getCollections } from 'lib/vendure';
+import { Suspense } from 'react';
 import FilterList from './filter';
 
 async function CollectionList() {

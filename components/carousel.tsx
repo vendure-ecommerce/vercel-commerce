@@ -15,8 +15,8 @@ export async function Carousel() {
   const carouselProducts = [...products, ...products, ...products];
 
   return (
-    <div className="w-full pb-6 pt-1">
-      <ul className="flex animate-carousel gap-4">
+    <div className="w-full pt-1 pb-6">
+      <ul className="animate-carousel flex gap-4">
         {carouselProducts.map((product, i) => (
           <li
             key={`${product.slug}${i}`}

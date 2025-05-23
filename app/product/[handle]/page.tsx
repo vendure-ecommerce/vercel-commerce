@@ -1,15 +1,16 @@
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-
 import { Product } from '@/lib/vendure/types';
+import { getActiveChannel, getProduct } from 'lib/vendure';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+
+/** Components */
 import { GridTileImage } from 'components/grid/tile';
-import Footer from 'components/layout/footer';
+import { Footer } from 'components/layout/footer';
 import { Gallery } from 'components/product/gallery';
 import { ProductProvider } from 'components/product/product-context';
 import { ProductDescription } from 'components/product/product-description';
-import { getActiveChannel, getProduct } from 'lib/vendure';
-import Link from 'next/link';
-import { Suspense } from 'react';
 
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;

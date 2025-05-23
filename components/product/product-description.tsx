@@ -1,7 +1,7 @@
+import { getActiveChannel } from '@/lib/vendure';
 import { AddToCart } from 'components/cart/add-to-cart';
 import Prose from 'components/prose';
 import { ProductFragment } from 'lib/vendure/types';
-import { getActiveChannel } from '../../lib/vendure';
 import Price from '../price';
 import { VariantSelector } from './variant-selector';
 

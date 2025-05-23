@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { ShoppingCart } from 'lucide-react';
+
 export default function OpenCart({
   className,
   quantity

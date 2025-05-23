@@ -1,6 +1,6 @@
 'use client';
 
-import type { ActiveOrderQuery, Order, Product, ProductVariant } from 'lib/vendure/types';
+import type { ActiveOrderQuery, Product, ProductVariant } from 'lib/vendure/types';
 import React, { createContext, use, useContext, useMemo } from 'react';
 
 type UpdateType = 'plus' | 'minus' | 'delete';

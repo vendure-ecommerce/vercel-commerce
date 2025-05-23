@@ -1,3 +1,5 @@
+import OpenSignIn from '@/components/account/open-sign-in';
+import { UserDropdown } from '@/components/account/user-dropdown';
 import CartModal from 'components/cart/modal';
 import LogoSquare from 'components/logo-square';
 import { getActiveCustomer, getMenu } from 'lib/vendure';
@@ -5,8 +7,6 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import MobileMenu from './mobile-menu';
 import Search, { SearchSkeleton } from './search';
-import OpenSignIn from '@/components/account/open-sign-in';
-import { UserDropdown } from '@/components/account/user-dropdown';
 
 const { SITE_NAME } = process.env;
 

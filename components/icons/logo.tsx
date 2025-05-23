@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+
 export default function LogoIcon(props: React.ComponentProps<'svg'>) {
   return (
     <svg

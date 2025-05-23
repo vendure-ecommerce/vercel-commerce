@@ -1,8 +1,8 @@
+import { CollectionFragment } from '@/lib/vendure/types';
 import { SortFilterItem } from 'lib/constants';
 import { Suspense } from 'react';
 import FilterItemDropdown from './dropdown';
 import { FilterItem } from './item';
-import { CollectionFragment } from '@/lib/vendure/types';
 
 export type ListItem = SortFilterItem | PathFilterItem;
 export type PathFilterItem = Pick<CollectionFragment, 'slug' | 'parentId' | 'name'>;
