@@ -7,14 +7,12 @@ import { VariantSelector } from './variant-selector';
 
 export async function ProductDescription({ product }: { product: ProductFragment }) {
   /**
-   * This should be calculated on the server side, currently it's a temporary fix to get the price
-   */
-  const fromPrice =
-    product.variantList?.items?.length > 0
-      ? Math.min(
-          ...product.variantList.items.map((variant) => variant.priceWithTax || variant.price || 0)
-        )
-      : null;
+   *  To use this you need to vercel-commerce plugin
+   *  @see https://github.com/vendure-ecommerce/vendure-vercel-commerce/tree/main/src/plugins/vercel-commerce
+   *
+   * */
+
+  const fromPrice = product.priceRange.min;
 
   const activeChannel = await getActiveChannel();
 
