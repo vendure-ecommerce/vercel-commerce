@@ -1,14 +1,25 @@
+import { authenticate } from '@/lib/vendure/mutations/customer';
+import { getActiveCustomerQuery } from '@/lib/vendure/queries/active-customer';
+import { DocumentNode } from 'graphql';
 import { TAGS } from 'lib/constants';
 import { isVendureError } from 'lib/type-guards';
 import { revalidateTag } from 'next/cache';
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+import {
+  addItemToOrder,
+  adjustOrderLineMutation,
+  removeOrderLineMutation
+} from './mutations/active-order';
+import { getActiveChannelQuery } from './queries/active-channel';
+import { getActiveOrderQuery } from './queries/active-order';
 import {
   getCollectionFacetValuesQuery,
   getCollectionProductsQuery,
   getCollectionQuery,
   getCollectionsQuery
 } from './queries/collection';
+import { getFacetsQuery } from './queries/facets';
 import { getMenuQuery } from './queries/menu';
 import { getProductQuery, getProductsQuery } from './queries/product';
 import {
@@ -41,17 +52,6 @@ import {
   RemoveOrderLineMutation,
   RemoveOrderLineMutationVariables
 } from './types';
-import {
-  addItemToOrder,
-  adjustOrderLineMutation,
-  removeOrderLineMutation
-} from './mutations/active-order';
-import { DocumentNode } from 'graphql';
-import { getActiveOrderQuery } from './queries/active-order';
-import { getActiveChannelQuery } from './queries/active-channel';
-import { getFacetsQuery } from './queries/facets';
-import { authenticate } from '@/lib/vendure/mutations/customer';
-import { getActiveCustomerQuery } from '@/lib/vendure/queries/active-customer';
 
 const endpoint = process.env.VENDURE_ENDPOINT || 'http://localhost:3000/shop-api';
 
@@ -358,11 +358,29 @@ export async function getActiveCustomer() {
   return res.body.activeCustomer;
 }
 
-export async function getPage(slug: string) {
-  // TODO: Implement with custom entity
-  return undefined;
+
+type Page = {
+  slug: any;
+  title: string;
+  body: string;
+  bodySummary?: string;
+  createdAt: string;
+  updatedAt: string;
+  seo?: {
+    title?: string;
+    description?: string;
+  };
 }
 
+export async function getPages(): Promise<Page[] | null> {
+  // TODO: Implement with custom entity when backend supports it
+  return null;
+}
+
+export async function getPage(slug: string): Promise<Page | null> {
+  // TODO: Implement with custom entity
+  return null;
+}
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.
 export async function revalidate(req: NextRequest): Promise<NextResponse> {
   const collectionWebhooks = ['collections/create', 'collections/delete', 'collections/update'];

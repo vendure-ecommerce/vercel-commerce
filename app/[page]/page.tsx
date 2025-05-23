@@ -1,13 +1,14 @@
-import type { Metadata } from 'next';
-
+import { getPage } from '@/lib/vendure';
 import Prose from 'components/prose';
-import { getPage } from 'lib/vendure';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 export async function generateMetadata(props: {
   params: Promise<{ page: string }>;
 }): Promise<Metadata> {
   const params = await props.params;
+
+  //TODO: Implement getPage function - this is a placeholder to suppress errors
   const page = await getPage(params.page);
 
   if (!page) return notFound();

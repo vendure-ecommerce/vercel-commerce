@@ -1,5 +1,5 @@
-import { getCollections, getPages, getProducts } from 'lib/vendure';
 import { validateEnvironmentVariables } from 'lib/utils';
+import { getCollections, getPages, getProducts } from 'lib/vendure';
 import { MetadataRoute } from 'next';
 
 type Route = {
@@ -23,24 +23,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const collectionsPromise = getCollections().then((collections) =>
     collections.map((collection) => ({
-      url: `${baseUrl}${collection.path}`,
+      url: `${baseUrl}${collection.slug}`,
       lastModified: collection.updatedAt
     }))
   );
 
   const productsPromise = getProducts({}).then((products) =>
     products.map((product) => ({
-      url: `${baseUrl}/product/${product.handle}`,
-      lastModified: product.updatedAt
+      url: `${baseUrl}/product/${product.slug}`,
+      lastModified: new Date().toISOString() //TODO: Implement lastModified for products
     }))
   );
 
-  const pagesPromise = getPages().then((pages) =>
-    pages.map((page) => ({
-      url: `${baseUrl}/${page.handle}`,
+  //TODO: Implement getPages function
+  const pagesPromise = getPages().then((pages) => {
+    // Handle null return from getPages
+    if (!pages) return [];
+    
+    return pages.map((page) => ({
+      url: `${baseUrl}/${page.slug}`,
       lastModified: page.updatedAt
-    }))
-  );
+    }));
+  });
 
   let fetchedRoutes: Route[] = [];
 
