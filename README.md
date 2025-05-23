@@ -17,11 +17,13 @@ A Next.js 15 and App Router-ready ecommerce template, built with [Vendure](https
 
 <h3 id="v1-note"></h3>
 
-> Note: Looking for Next.js Commerce v1? View
+> Note: Looking for Next.js aCommerce v1? View
 > the [code](https://github.com/vercel/commerce/tree/v1), [demo](https://commerce-v1.vercel.store),
 > and [release notes](https://github.com/vercel/commerce/releases/tag/v1).
 
 ## Running locally
+
+To use this template, you need to install the [Vendure Vercel Commerce plugin](https://github.com/vendure-ecommerce/vendure-vercel-commerce/tree/main/src/plugins/vercel-commerce) in your Vendure instance.
 
 You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js Commerce. It's
 recommended you use [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables) for
