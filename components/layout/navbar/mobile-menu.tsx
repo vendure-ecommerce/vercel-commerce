@@ -32,13 +32,6 @@ export default function MobileMenu({ menu }: { menu: CollectionsQuery['collectio
 
   return (
     <>
-      <button
-        onClick={openMobileMenu}
-        aria-label="Open mobile menu"
-        className="flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors md:hidden dark:border-neutral-700 dark:text-white"
-      >
-        <Menu className="h-4" />
-      </button>
       <Transition show={isOpen}>
         <Dialog onClose={closeMobileMenu} className="relative z-50">
           <Transition.Child
@@ -64,7 +57,7 @@ export default function MobileMenu({ menu }: { menu: CollectionsQuery['collectio
             <Dialog.Panel className="fixed top-0 right-0 bottom-0 left-0 flex h-full w-full flex-col bg-white pb-6 dark:bg-black">
               <div className="p-4">
                 <button
-                  className="mb-4 flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:text-white"
+                  className="border-border mb-4 flex h-11 w-11 items-center justify-center rounded-md border text-black transition-colors dark:text-white"
                   onClick={closeMobileMenu}
                   aria-label="Close mobile menu"
                 >
@@ -95,6 +88,13 @@ export default function MobileMenu({ menu }: { menu: CollectionsQuery['collectio
           </Transition.Child>
         </Dialog>
       </Transition>
+      <button
+        onClick={openMobileMenu}
+        aria-label="Open mobile menu"
+        className="borde-border flex h-11 w-11 items-center justify-center rounded-md border text-black transition-colors md:hidden dark:text-white"
+      >
+        <Menu className="h-4" />
+      </button>
     </>
   );
 }

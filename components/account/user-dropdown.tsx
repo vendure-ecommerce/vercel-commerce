@@ -13,7 +13,7 @@ export async function UserDropdown({ customer }: { customer: Active_CustomerFrag
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="relative flex h-11 w-auto cursor-pointer items-center justify-center rounded-md border border-neutral-200 px-4 text-sm font-medium text-black transition-colors dark:border-neutral-700 dark:text-white">
+        <div className="border-border relative flex h-11 w-auto cursor-pointer items-center justify-center rounded-md border px-4 text-sm font-medium text-black transition-colors dark:text-white">
           <User className="mr-1 h-4 transition-all ease-in-out" />
           {customer.firstName} {customer.lastName}
         </div>

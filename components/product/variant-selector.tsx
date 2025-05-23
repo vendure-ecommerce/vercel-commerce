@@ -71,7 +71,7 @@ export function VariantSelector({
                 disabled={!isAvailableForSale}
                 title={`${optionGroup.name} ${value}${!isAvailableForSale ? ' (Out of Stock)' : ''}`}
                 className={cn(
-                  'flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-2 py-1 text-sm dark:border-neutral-800 dark:bg-neutral-900',
+                  'border-border flex min-w-[48px] items-center justify-center rounded-full border bg-neutral-100 px-2 py-1 text-sm dark:bg-neutral-900',
                   {
                     'cursor-default ring-2 ring-blue-600': isActive,
                     'ring-1 ring-transparent transition duration-300 ease-in-out hover:ring-blue-600':
