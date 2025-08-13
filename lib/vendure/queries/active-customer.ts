@@ -1,19 +1,18 @@
-import gql from 'graphql-tag';
+import { graphql } from '@/gql/graphql';
 
-export const activeCustomerFragment = gql`
+export const activeCustomerFragment = graphql(`
   fragment active_customer on Customer {
     id
     firstName
     lastName
     emailAddress
   }
-`;
+`);
 
-export const getActiveCustomerQuery = gql`
+export const getActiveCustomerQuery = graphql(`
   query getActiveCustomer {
     activeCustomer {
       ...active_customer
     }
   }
-  ${activeCustomerFragment}
-`;
+`, [activeCustomerFragment]);

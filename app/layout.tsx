@@ -6,7 +6,7 @@ import { ensureStartsWith } from 'lib/utils';
 import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 import './globals.css';
-import { ChannelProvider } from '../components/cart/channel-context';
+import { ChannelProvider } from '@/components/cart/channel-context';
 import { Toaster } from '@/ui-components/ui/toaster';
 import { ToastProvider } from '@/ui-components/ui/toast';
 

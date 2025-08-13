@@ -2,10 +2,11 @@ import { SortFilterItem } from 'lib/constants';
 import { Suspense } from 'react';
 import FilterItemDropdown from './dropdown';
 import { FilterItem } from './item';
-import { CollectionFragment } from '@/lib/vendure/types';
+import { ResultOf } from 'gql.tada';
+import { collectionFragment } from '@/lib/vendure/queries/collection';
 
 export type ListItem = SortFilterItem | PathFilterItem;
-export type PathFilterItem = Pick<CollectionFragment, 'slug' | 'parentId' | 'name'>;
+export type PathFilterItem = Pick<ResultOf<typeof collectionFragment>, 'slug' | 'parentId' | 'name'>;
 
 function FilterItemList({ list }: { list: ListItem[] }) {
   return (

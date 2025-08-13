@@ -1,5 +1,3 @@
-import seoFragment from '../fragments/seo';
-
 // TODO: needs extension in Vendure
 // const pageFragment = /* GraphQL */ `
 //   fragment page on Page {

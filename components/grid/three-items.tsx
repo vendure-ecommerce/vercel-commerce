@@ -1,16 +1,17 @@
 import { GridTileImage } from 'components/grid/tile';
 import { getActiveChannel, getCollectionProducts } from 'lib/vendure';
-import type { Product, SearchResultFragment } from 'lib/vendure/types';
 import Link from 'next/link';
 import { useActiveChannel } from '../cart/channel-context';
 import { getSearchResultPrice } from '../../lib/utils';
+import { ResultOf } from 'gql.tada';
+import searchResultFragment from '@/lib/vendure/fragments/search-result';
 
 async function ThreeItemGridItem({
   item,
   size,
   priority
 }: {
-  item: SearchResultFragment;
+  item: ResultOf<typeof searchResultFragment>;
   size: 'full' | 'half';
   priority?: boolean;
 }) {
@@ -47,7 +48,7 @@ async function ThreeItemGridItem({
 export async function ThreeItemGrid() {
   // Collections that start with `hidden-*` are hidden from the search page.
   const homepageItems = await getCollectionProducts({
-    collection: 'home-page-featured-items'
+    collection: 'electronics'
   });
 
   if (!homepageItems[0] || !homepageItems[1] || !homepageItems[2]) return null;

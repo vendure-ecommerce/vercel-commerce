@@ -1,18 +1,24 @@
 'use client';
 
-import type { ActiveOrderQuery, Order, Product, ProductVariant } from 'lib/vendure/types';
 import React, { createContext, use, useContext, useMemo } from 'react';
+import { ResultOf } from 'gql.tada';
+import activeOrderFragment from '@/lib/vendure/fragments/active-order';
+import productFragment, { variantFragment } from '@/lib/vendure/fragments/product';
 
 type UpdateType = 'plus' | 'minus' | 'delete';
 
-type ActiveOrder = Pick<ActiveOrderQuery, 'activeOrder'>['activeOrder'];
-
 type CartAction =
   | { type: 'UPDATE_ITEM'; payload: { merchandiseId: string; updateType: UpdateType } }
-  | { type: 'ADD_ITEM'; payload: { variant: ProductVariant; product: Product } };
+  | {
+      type: 'ADD_ITEM';
+      payload: {
+        variant: ResultOf<typeof variantFragment>;
+        product: ResultOf<typeof productFragment>;
+      };
+    };
 
 type CartContextType = {
-  cart: ActiveOrder | undefined;
+  cart?: ResultOf<typeof activeOrderFragment> | null;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -22,7 +28,7 @@ export function CartProvider({
   activeOrderPromise
 }: {
   children: React.ReactNode;
-  activeOrderPromise: Promise<ActiveOrder | undefined>;
+  activeOrderPromise: Promise<ResultOf<typeof activeOrderFragment> | null>;
 }) {
   const initialCart = use(activeOrderPromise);
 

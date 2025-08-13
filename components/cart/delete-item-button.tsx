@@ -2,10 +2,9 @@
 
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { removeItem } from 'components/cart/actions';
-import type {GetActiveOrderQuery, OrderLine} from 'lib/vendure/types';
 import { useActionState } from 'react';
 
-export function DeleteItemButton({ item }: { item: Pick<OrderLine, 'id'> }) {
+export function DeleteItemButton({ item }: { item: Pick<{ id: string }, 'id'> }) {
   const [message, formAction] = useActionState(removeItem, null);
   const merchandiseId = item.id;
   const actionWithVariant = formAction.bind(null, merchandiseId);

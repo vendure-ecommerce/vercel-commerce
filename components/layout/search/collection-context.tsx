@@ -1,16 +1,17 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import { CollectionFragment } from '@/lib/vendure/types';
+import { ResultOf } from 'gql.tada';
+import { collectionFragment } from '@/lib/vendure/queries/collection';
 
-const CollectionContext = createContext<CollectionFragment | undefined | null>(undefined);
+const CollectionContext = createContext<ResultOf<typeof collectionFragment> | undefined | null>(undefined);
 
 export function CollectionProvider({
   children,
   collection
 }: {
   children: any;
-  collection: CollectionFragment | undefined | null;
+  collection: ResultOf<typeof collectionFragment> | undefined | null;
 }) {
   return <CollectionContext.Provider value={collection}>{children}</CollectionContext.Provider>;
 }

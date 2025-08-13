@@ -8,10 +8,10 @@ import {
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import Grid from 'components/grid';
-import ProductGridItems from 'components/layout/product-grid-items';
+import Grid from '@/components/grid';
+import ProductGridItems from '@/components/layout/product-grid-items';
 import { defaultSort, sorting } from 'lib/constants';
-import Facets from '../../../components/layout/search/facets';
+import Facets from '@/components/layout/search/facets';
 import { CollectionProvider } from '@/components/layout/search/collection-context';
 
 export async function generateMetadata(props: {
@@ -23,8 +23,8 @@ export async function generateMetadata(props: {
   if (!collection) return notFound();
 
   return {
-    title: collection.customFields?.seoTitle || collection.name,
-    description: collection.customFields?.seoDescription || `${collection.name} products`
+    title: collection.name,
+    description: collection.description
   };
 }
 

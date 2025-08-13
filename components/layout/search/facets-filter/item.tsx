@@ -1,16 +1,18 @@
 'use client';
 
-import { Facet_ValueFragment, FacetFragment } from '@/lib/vendure/types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { MultiSelect } from '@/ui-components/multi-select';
 import { useMemo } from 'react';
+import { ResultOf } from 'gql.tada';
+import { facetFragment, facetValueFragment } from '@/lib/vendure/fragments/facet';
+import { readFragment } from '@/gql/graphql';
 
 export default function FacetsFilterItem({
   item,
   collectionFacetValues
 }: {
-  item: FacetFragment;
-  collectionFacetValues: Pick<Facet_ValueFragment, 'code' | 'name' | 'id'>[];
+  item: ResultOf<typeof facetFragment>;
+  collectionFacetValues: ResultOf<typeof facetValueFragment>[];
 }) {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -39,6 +41,7 @@ export default function FacetsFilterItem({
         <MultiSelect
           defaultValue={defaultValue}
           options={item.values
+            .map(valueFragment => readFragment(facetValueFragment, valueFragment))
             .filter(
               (itemValue) =>
                 collectionFacetValues.findIndex((facetValue) => facetValue.id === itemValue.id) > -1

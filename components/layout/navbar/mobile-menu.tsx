@@ -7,9 +7,10 @@ import { Fragment, Suspense, useEffect, useState } from 'react';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import Search, { SearchSkeleton } from './search';
-import { CollectionsQuery } from '../../../lib/vendure/types';
+import { ResultOf } from 'gql.tada';
+import { collectionFragment } from '@/lib/vendure/queries/collection';
 
-export default function MobileMenu({ menu }: { menu: CollectionsQuery['collections']['items'] }) {
+export default function MobileMenu({ menu }: { menu: ResultOf<typeof collectionFragment>[] }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);

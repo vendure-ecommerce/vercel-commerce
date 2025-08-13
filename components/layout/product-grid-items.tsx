@@ -1,14 +1,15 @@
 import Grid from 'components/grid';
 import { GridTileImage } from 'components/grid/tile';
-import { GetCollectionProductsQuery } from 'lib/vendure/types';
 import Link from 'next/link';
 import { getSearchResultPrice } from '../../lib/utils';
+import { ResultOf } from 'gql.tada';
+import searchResultFragment from '@/lib/vendure/fragments/search-result';
 
 export default function ProductGridItems({
   products,
   currencyCode
 }: {
-  products: GetCollectionProductsQuery['search']['items'];
+  products: ResultOf<typeof searchResultFragment>[];
   currencyCode: string;
 }) {
   return (

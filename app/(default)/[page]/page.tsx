@@ -12,20 +12,12 @@ export async function generateMetadata(props: {
 
   if (!page) return notFound();
 
-  return {
-    title: page.seo?.title || page.title,
-    description: page.seo?.description || page.bodySummary,
-    openGraph: {
-      publishedTime: page.createdAt,
-      modifiedTime: page.updatedAt,
-      type: 'article'
-    }
-  };
+  return {};
 }
 
 export default async function Page(props: { params: Promise<{ page: string }> }) {
   const params = await props.params;
-  const page = await getPage(params.page);
+  const page = (await getPage(params.page)) as any;
 
   if (!page) return notFound();
 

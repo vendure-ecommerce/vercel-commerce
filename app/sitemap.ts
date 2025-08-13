@@ -1,6 +1,10 @@
-import { getCollections, getPages, getProducts } from 'lib/vendure';
+import { getCollections, getProducts } from 'lib/vendure';
 import { validateEnvironmentVariables } from 'lib/utils';
 import { MetadataRoute } from 'next';
+import { readFragment } from '@/gql/graphql';
+import productFragment from '@/lib/vendure/fragments/product';
+import searchResultFragment from '@/lib/vendure/fragments/search-result';
+import { collectionFragment } from '@/lib/vendure/queries/collection';
 
 type Route = {
   url: string;
@@ -22,30 +26,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const collectionsPromise = getCollections().then((collections) =>
-    collections.map((collection) => ({
-      url: `${baseUrl}${collection.path}`,
-      lastModified: collection.updatedAt
-    }))
+    collections
+      .map((data) => readFragment(collectionFragment, data))
+      .map((collection) => ({
+        url: `${baseUrl}/search/${collection.slug}`,
+        lastModified: collection.updatedAt
+      }))
   );
 
   const productsPromise = getProducts({}).then((products) =>
-    products.map((product) => ({
-      url: `${baseUrl}/product/${product.handle}`,
-      lastModified: product.updatedAt
-    }))
+    products
+      .map((data) => readFragment(searchResultFragment, data))
+      .map((product) => ({
+        url: `${baseUrl}/product/${product.slug}`,
+        lastModified: new Date().toISOString()
+      }))
   );
 
-  const pagesPromise = getPages().then((pages) =>
-    pages.map((page) => ({
-      url: `${baseUrl}/${page.handle}`,
-      lastModified: page.updatedAt
-    }))
-  );
+  // const pagesPromise = getPages().then((pages) =>
+  //   pages.map((page) => ({
+  //     url: `${baseUrl}/${page.handle}`,
+  //     lastModified: page.updatedAt
+  //   }))
+  // );
 
   let fetchedRoutes: Route[] = [];
 
   try {
-    fetchedRoutes = (await Promise.all([collectionsPromise, productsPromise, pagesPromise])).flat();
+    fetchedRoutes = (await Promise.all([collectionsPromise, productsPromise])).flat();
   } catch (error) {
     throw JSON.stringify(error, null, 2);
   }

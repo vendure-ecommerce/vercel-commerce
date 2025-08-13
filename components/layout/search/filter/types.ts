@@ -1,4 +1,5 @@
-import { GetCollectionsQuery } from '../../../../lib/vendure/types';
+import { ResultOf } from 'gql.tada';
+import { collectionFragment } from '../../../../lib/vendure/queries/collection';
 
-export type FilterList = GetCollectionsQuery['collections']['items'];
-export type FilterListItem = FilterList[0] & { path: string };
+export type FilterList = ResultOf<typeof collectionFragment>[];
+export type FilterListItem = ResultOf<typeof collectionFragment> & { path: string };

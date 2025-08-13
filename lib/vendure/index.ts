@@ -4,6 +4,7 @@ import { revalidateTag } from 'next/cache';
 import { cookies, headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import {
+  collectionFragment,
   getCollectionFacetValuesQuery,
   getCollectionProductsQuery,
   getCollectionQuery,
@@ -12,50 +13,31 @@ import {
 import { getMenuQuery } from './queries/menu';
 import { getProductQuery, getProductsQuery } from './queries/product';
 import {
-  ActiveOrderQuery,
-  AddItemToOrderMutation,
-  AddItemToOrderMutationVariables,
-  AdjustOrderLineMutation,
-  AdjustOrderLineMutationVariables,
-  AuthenticateMutation,
-  AuthenticateMutationVariables,
-  CollectionsQuery,
-  FacetValueFilterInput,
-  GetActiveChannelQuery,
-  GetActiveCustomerQuery,
-  GetActiveCustomerQueryVariables,
-  GetCollectionFacetValuesQuery,
-  GetCollectionFacetValuesQueryVariables,
-  GetCollectionProductsQuery,
-  GetCollectionProductsQueryVariables,
-  GetCollectionQuery,
-  GetCollectionQueryVariables,
-  GetCollectionsQuery,
-  GetCollectionsQueryVariables,
-  GetFacetsQuery,
-  GetFacetsQueryVariables,
-  GetProductQuery,
-  GetProductQueryVariables,
-  GetProductsQuery,
-  GetProductsQueryVariables,
-  RemoveOrderLineMutation,
-  RemoveOrderLineMutationVariables
-} from './types';
-import {
   addItemToOrder,
   adjustOrderLineMutation,
   removeOrderLineMutation
 } from './mutations/active-order';
-import { DocumentNode } from 'graphql';
+import { DocumentNode, print } from 'graphql';
 import { getActiveOrderQuery } from './queries/active-order';
 import { getActiveChannelQuery } from './queries/active-channel';
 import { getFacetsQuery } from './queries/facets';
+import { facetFragment, facetValueFragment } from './fragments/facet';
+import activeOrderFragment from './fragments/active-order';
+import searchResultFragment from './fragments/search-result';
 import { authenticate } from '@/lib/vendure/mutations/customer';
-import { getActiveCustomerQuery } from '@/lib/vendure/queries/active-customer';
+import { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import {
+  activeCustomerFragment,
+  getActiveCustomerQuery
+} from '@/lib/vendure/queries/active-customer';
+import { VariablesOf, ResultOf } from 'gql.tada';
+import { readFragment } from '@/gql/graphql';
+import activeChannelFragment from '@/lib/vendure/fragments/active-channel';
+import productFragment from '@/lib/vendure/fragments/product';
 
-const endpoint = process.env.VENDURE_ENDPOINT || 'http://localhost:3000/shop-api';
+const endpoint = process.env.VENDURE_API_ENDPOINT || 'http://localhost:3000/shop-api';
 
-export async function vendureFetch<T, TVariables = unknown>({
+export async function vendureFetch<T, V extends Record<string, any> = Record<string, any>>({
   cache = 'force-cache',
   headers,
   query,
@@ -64,9 +46,9 @@ export async function vendureFetch<T, TVariables = unknown>({
 }: {
   cache?: RequestCache;
   headers?: HeadersInit;
-  query: string | DocumentNode;
+  query: DocumentNode | TypedDocumentNode<T, V> | string;
   tags?: string[];
-  variables?: TVariables;
+  variables?: V;
 }): Promise<{ status: number; body: T; headers: Headers } | never> {
   try {
     const result = await fetch(endpoint, {
@@ -76,7 +58,7 @@ export async function vendureFetch<T, TVariables = unknown>({
         ...headers
       },
       body: JSON.stringify({
-        ...(query && { query: typeof query === 'string' ? query : query.loc?.source.body }),
+        ...(query && { query: typeof query === 'string' ? query : print(query) }),
         ...(variables && { variables })
       }),
       cache,
@@ -131,7 +113,7 @@ async function updateAuthCookie(headers: Headers) {
 }
 
 export async function addToCart(productVariantId: string, quantity: number) {
-  const res = await vendureFetch<AddItemToOrderMutation, AddItemToOrderMutationVariables>({
+  const res = await vendureFetch({
     query: addItemToOrder,
     variables: {
       productVariantId,
@@ -147,7 +129,7 @@ export async function addToCart(productVariantId: string, quantity: number) {
 }
 
 export async function adjustCartItem(orderLineId: string, quantity: number) {
-  const res = await vendureFetch<AdjustOrderLineMutation, AdjustOrderLineMutationVariables>({
+  const res = await vendureFetch({
     query: adjustOrderLineMutation,
     variables: {
       orderLineId,
@@ -161,7 +143,7 @@ export async function adjustCartItem(orderLineId: string, quantity: number) {
 }
 
 export async function removeFromCart(orderLineId: string) {
-  const res = await vendureFetch<RemoveOrderLineMutation, RemoveOrderLineMutationVariables>({
+  const res = await vendureFetch({
     query: removeOrderLineMutation,
     variables: {
       orderLineId
@@ -173,28 +155,28 @@ export async function removeFromCart(orderLineId: string) {
   return res.body.removeOrderLine;
 }
 
-export async function getActiveOrder() {
-  const res = await vendureFetch<ActiveOrderQuery>({
+export async function getActiveOrder(): Promise<ResultOf<typeof activeOrderFragment> | null> {
+  const res = await vendureFetch({
     query: getActiveOrderQuery,
     tags: [TAGS.cart],
     headers: await getAuthHeaders()
   });
 
-  return res.body.activeOrder;
+  return res.body.activeOrder ? readFragment(activeOrderFragment, res.body.activeOrder) : null;
 }
 
-export async function getActiveChannel() {
-  const res = await vendureFetch<GetActiveChannelQuery>({
+export async function getActiveChannel(): Promise<ResultOf<typeof activeChannelFragment>> {
+  const res = await vendureFetch({
     query: getActiveChannelQuery,
     tags: [TAGS.channel],
     headers: await getAuthHeaders()
   });
 
-  return res.body.activeChannel;
+  return readFragment(activeChannelFragment, res.body.activeChannel);
 }
 
-export async function getCollection(handle: string) {
-  const res = await vendureFetch<GetCollectionQuery, GetCollectionQueryVariables>({
+export async function getCollection(handle: string): Promise<ResultOf<typeof collectionFragment> | null> {
+  const res = await vendureFetch({
     query: getCollectionQuery,
     tags: [TAGS.collections],
     variables: {
@@ -202,7 +184,7 @@ export async function getCollection(handle: string) {
     }
   });
 
-  return res.body.collection;
+  return res.body.collection ? readFragment(collectionFragment, res.body.collection) : null;
 }
 
 export async function getCollectionProducts({
@@ -214,9 +196,9 @@ export async function getCollectionProducts({
   collection: string;
   sortKey?: string;
   direction?: 'ASC' | 'DESC';
-  facetValueFilters?: Array<FacetValueFilterInput>;
-}) {
-  const res = await vendureFetch<GetCollectionProductsQuery, GetCollectionProductsQueryVariables>({
+  facetValueFilters?: VariablesOf<typeof getCollectionProductsQuery>['facetValueFilters'];
+}): Promise<ResultOf<typeof searchResultFragment>[]> {
+  const res = await vendureFetch({
     query: getCollectionProductsQuery,
     tags: [TAGS.collections, TAGS.products],
     variables: {
@@ -228,7 +210,7 @@ export async function getCollectionProducts({
     }
   });
 
-  return res.body.search.items;
+  return res.body.search.items.map(item => readFragment(searchResultFragment, item));
 }
 
 export async function getCollectionFacetValues({
@@ -239,11 +221,8 @@ export async function getCollectionFacetValues({
   collection: string;
   sortKey?: string;
   direction?: 'ASC' | 'DESC';
-}) {
-  const res = await vendureFetch<
-    GetCollectionFacetValuesQuery,
-    GetCollectionFacetValuesQueryVariables
-  >({
+}): Promise<ResultOf<typeof facetValueFragment>[]> {
+  const res = await vendureFetch({
     query: getCollectionFacetValuesQuery,
     tags: [TAGS.collections, TAGS.products, TAGS.facets],
     variables: {
@@ -254,7 +233,7 @@ export async function getCollectionFacetValues({
     }
   });
 
-  return res.body.search.facetValues.map((item) => item.facetValue);
+  return res.body.search.facetValues.map((item) => readFragment(facetValueFragment, item.facetValue));
 }
 
 export async function getCollections({
@@ -263,8 +242,8 @@ export async function getCollections({
 }: {
   topLevelOnly?: boolean;
   parentId?: string;
-} = {}) {
-  const res = await vendureFetch<GetCollectionsQuery, GetCollectionsQueryVariables>({
+} = {}): Promise<ResultOf<typeof collectionFragment>[]> {
+  const res = await vendureFetch({
     query: getCollectionsQuery,
     tags: [TAGS.collections],
     variables: {
@@ -273,29 +252,29 @@ export async function getCollections({
     }
   });
 
-  return res.body.collections.items;
+  return res.body.collections.items.map(item => readFragment(collectionFragment, item));
 }
 
-export async function getFacets() {
-  const res = await vendureFetch<GetFacetsQuery, GetFacetsQueryVariables>({
+export async function getFacets(): Promise<ResultOf<typeof facetFragment>[]> {
+  const res = await vendureFetch({
     query: getFacetsQuery,
     tags: [TAGS.facets]
   });
 
-  return res.body.facets.items;
+  return res.body.facets.items.map(item => readFragment(facetFragment, item));
 }
 
-export async function getMenu() {
-  const res = await vendureFetch<CollectionsQuery>({
+export async function getMenu(): Promise<ResultOf<typeof collectionFragment>[]> {
+  const res = await vendureFetch({
     query: getMenuQuery,
     tags: [TAGS.collections]
   });
 
-  return res.body.collections.items;
+  return res.body.collections.items.map(item => readFragment(collectionFragment, item));
 }
 
 export async function getProduct(handle: string) {
-  const res = await vendureFetch<GetProductQuery, GetProductQueryVariables>({
+  const res = await vendureFetch({
     query: getProductQuery,
     tags: [TAGS.products],
     variables: {
@@ -303,7 +282,7 @@ export async function getProduct(handle: string) {
     }
   });
 
-  return res.body.product;
+  return readFragment(productFragment, res.body.product);
 }
 
 export async function getProducts({
@@ -315,7 +294,7 @@ export async function getProducts({
   direction?: string;
   sortKey?: string;
 }) {
-  const res = await vendureFetch<GetProductsQuery, GetProductsQueryVariables>({
+  const res = await vendureFetch({
     query: getProductsQuery,
     tags: [TAGS.products],
     variables: {
@@ -326,11 +305,11 @@ export async function getProducts({
     }
   });
 
-  return res.body.search.items;
+  return res.body.search.items.map(item => readFragment(searchResultFragment, item));
 }
 
 export async function authenticateCustomer(username: string, password: string) {
-  const res = await vendureFetch<AuthenticateMutation, AuthenticateMutationVariables>({
+  const res = await vendureFetch({
     query: authenticate,
     tags: [TAGS.customer],
     variables: {
@@ -349,13 +328,13 @@ export async function authenticateCustomer(username: string, password: string) {
 }
 
 export async function getActiveCustomer() {
-  const res = await vendureFetch<GetActiveCustomerQuery, GetActiveCustomerQueryVariables>({
+  const res = await vendureFetch({
     query: getActiveCustomerQuery,
     tags: [TAGS.customer],
     headers: await getAuthHeaders()
   });
 
-  return res.body.activeCustomer;
+  return readFragment(activeCustomerFragment, res.body.activeCustomer);
 }
 
 export async function getPage(slug: string) {

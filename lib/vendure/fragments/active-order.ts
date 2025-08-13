@@ -1,39 +1,53 @@
+import { graphql } from '@/gql/graphql';
 import productFragment from './product';
-import gql from "graphql-tag";
 
-const activeOrderFragment = gql`
+const orderAddressFragment = graphql(`
+  fragment OrderAddress on OrderAddress {
+    fullName
+  }
+`);
+
+const activeOrderFragment = graphql(
+  `
     fragment active_order on Order {
+      id
+      subTotal
+      subTotalWithTax
+      currencyCode
+      totalWithTax
+      total
+      lines {
         id
-        subTotal
-        subTotalWithTax
-        currencyCode
-        totalWithTax
-        total
-        lines {
+        quantity
+        linePriceWithTax
+        productVariant {
+          ... on ProductVariant {
             id
-            quantity
-            linePriceWithTax
-            productVariant {
-                ... on ProductVariant {
-                    id
-                    name
-                    options {
-                        code
-                        name
-                        group {
-                            code
-                            name
-                        }
-                    }
-                    product {
-                        ...product
-                    }
-                }
+            name
+            options {
+              code
+              name
+              group {
+                code
+                name
+              }
             }
+            product {
+              ...product
+            }
+          }
         }
-        totalQuantity
+      }
+      totalQuantity
+      billingAddress {
+        ...OrderAddress
+      }
+      shippingAddress {
+        ...OrderAddress
+      }
     }
-    ${productFragment}
-`;
+  `,
+  [productFragment, orderAddressFragment]
+);
 
 export default activeOrderFragment;

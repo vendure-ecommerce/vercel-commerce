@@ -3,7 +3,6 @@
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { updateItemQuantity } from 'components/cart/actions';
-import type { OrderLine } from 'lib/vendure/types';
 import { useActionState } from 'react';
 
 function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
@@ -31,7 +30,7 @@ export function EditItemQuantityButton({
   item,
   type
 }: {
-  item: Pick<OrderLine, 'id' | 'quantity'>;
+  item: Pick<{ id: string; quantity: number }, 'id' | 'quantity'>;
   type: 'plus' | 'minus';
 }) {
   const [message, formAction] = useActionState(updateItemQuantity, null);

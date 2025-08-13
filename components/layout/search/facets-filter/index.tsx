@@ -1,12 +1,13 @@
-import { Facet_ValueFragment, FacetFragment } from '@/lib/vendure/types';
 import FacetsFilterItem from './item';
+import { ResultOf } from 'gql.tada';
+import { facetFragment, facetValueFragment } from '@/lib/vendure/fragments/facet';
 
 export default function FacetsFilter({
   list,
   collectionFacetValues
 }: {
-  list: FacetFragment[];
-  collectionFacetValues: Pick<Facet_ValueFragment, 'code' | 'name' | 'facetId' | 'id'>[];
+  list: ResultOf<typeof facetFragment>[];
+  collectionFacetValues: ResultOf<typeof facetValueFragment>[];
 }) {
   return (
     <div className="flex flex-wrap justify-start gap-4 md:items-center">

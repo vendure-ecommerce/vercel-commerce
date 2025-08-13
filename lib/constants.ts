@@ -1,5 +1,3 @@
-import {Active_OrderFragment} from "@/lib/vendure/types";
-
 export const AUTH_COOKIE_KEY = 'vendure-auth-token'
 
 

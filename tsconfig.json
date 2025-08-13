@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es2015",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "downlevelIteration": true,
     "allowJs": true,
     "skipLibCheck": true,
@@ -20,14 +24,24 @@
     "plugins": [
       {
         "name": "next"
+      },
+      {
+        "name": "gql.tada/ts-plugin",
+        "schema": "https://demo.vendure.io/shop-api",
+        "tadaOutputLocation": "./gql/graphql-env.d.ts"
       }
     ],
     "paths": {
-      "@/components/*": ["components/*"],
-      "@/lib/*": ["lib/*"],
-      "@/ui-components/*": ["ui-components/*"]
+      "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

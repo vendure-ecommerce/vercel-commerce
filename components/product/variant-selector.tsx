@@ -2,13 +2,9 @@
 
 import clsx from 'clsx';
 import { useProduct, useUpdateURL } from 'components/product/product-context';
-import {
-  Product_Option_GroupFragment,
-  ProductOption,
-  ProductOptionGroup,
-  ProductVariant,
-  VariantFragment
-} from 'lib/vendure/types';
+import { FragmentOf } from 'gql.tada';
+import { variantFragment, productOptionGroupFragment } from '@/lib/vendure/fragments/product';
+import { readFragment } from '@/gql/graphql';
 
 type Combination = {
   id: string;
@@ -20,31 +16,39 @@ export function VariantSelector({
   optionGroups,
   variants
 }: {
-  optionGroups: Array<Product_Option_GroupFragment>;
-  variants: Array<VariantFragment>;
+  optionGroups: Array<FragmentOf<typeof productOptionGroupFragment>>;
+  variants: Array<FragmentOf<typeof variantFragment>>;
 }) {
   const { state, updateOption } = useProduct();
   const updateURL = useUpdateURL();
+  const processedOptionGroups = optionGroups.map((groupFrag) =>
+    readFragment(productOptionGroupFragment, groupFrag)
+  );
+
   const hasNoOptionsOrJustOneOption =
-    !optionGroups.length || (optionGroups.length === 1 && optionGroups[0]?.options.length === 1);
+    !processedOptionGroups.length ||
+    (processedOptionGroups.length === 1 && processedOptionGroups[0]?.options.length === 1);
 
   if (hasNoOptionsOrJustOneOption) {
     return null;
   }
 
-  const combinations: Combination[] = variants.map((variant) => ({
-    id: variant.id,
-    availableForSale: true, // TODO: Stock level
-    ...variant.options.reduce(
-      (accumulator, option) => ({ ...accumulator, [option.group.code]: option.code }),
-      {}
-    )
-  }));
+  const combinations: Combination[] = variants.map((variantFrag) => {
+    const variant = readFragment(variantFragment, variantFrag);
+    return {
+      id: variant.id,
+      availableForSale: true, // TODO: Stock level
+      ...variant.options.reduce(
+        (accumulator, option) => ({ ...accumulator, [option.group.code]: option.code }),
+        {}
+      )
+    };
+  });
 
-  return optionGroups.map((optionGroup) => (
+  return processedOptionGroups.map((optionGroup) => (
     <form key={optionGroup.id}>
       <dl className="mb-8">
-        <dt className="mb-4 text-sm uppercase tracking-wide">{optionGroup.name}</dt>
+        <dt className="mb-4 text-sm tracking-wide uppercase">{optionGroup.name}</dt>
         <dd className="flex flex-wrap gap-3">
           {optionGroup.options.map((value) => {
             // Base option params on current selectedOptions so we can preserve any other param state.
@@ -52,10 +56,12 @@ export function VariantSelector({
 
             // Filter out invalid options and check if the option combination is available for sale.
             const filtered = Object.entries(optionParams).filter(([key, value]) =>
-              optionGroups.find(
-                (option) =>
-                  option.code === key && option.options.findIndex((o) => o.code === value) !== -1
-              )
+              optionGroups
+                .map((data) => readFragment(productOptionGroupFragment, data))
+                .find(
+                  (option) =>
+                    option.code === key && option.options.findIndex((o) => o.code === value) !== -1
+                )
             );
 
             const isAvailableForSale = combinations.find((combination) =>

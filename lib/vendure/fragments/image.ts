@@ -1,4 +1,6 @@
-const assetFragment = /* GraphQL */ `
+import { graphql } from "@/gql/graphql";
+
+const assetFragment = graphql(`
     fragment image on Asset {
         source
         preview
@@ -6,6 +8,6 @@ const assetFragment = /* GraphQL */ `
         height
         name
     }
-`;
+`);
 
 export default assetFragment;

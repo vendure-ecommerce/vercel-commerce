@@ -1,6 +1,6 @@
-import gql from "graphql-tag";
+import {graphql} from "@/gql/graphql";
 
-const activeChannelFragment = gql`
+const activeChannelFragment = graphql(`
     fragment active_channel on Channel {
         id
         code
@@ -13,6 +13,6 @@ const activeChannelFragment = gql`
             name
         }
     }
-`;
+`);
 
 export default activeChannelFragment;

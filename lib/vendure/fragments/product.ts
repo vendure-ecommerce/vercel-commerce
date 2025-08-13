@@ -1,7 +1,7 @@
-import gql from 'graphql-tag';
+import { graphql } from '@/gql/graphql';
 import assetFragment from './image';
 
-const variantFragment = gql`
+export const variantFragment = graphql(`
   fragment variant on ProductVariant {
     id
     name
@@ -19,9 +19,9 @@ const variantFragment = gql`
     priceWithTax
     price
   }
-`;
+`);
 
-const productOptionGroupFragment = gql`
+export const productOptionGroupFragment = graphql(`
   fragment product_option_group on ProductOptionGroup {
     id
     name
@@ -32,39 +32,35 @@ const productOptionGroupFragment = gql`
       code
     }
   }
-`;
+`);
 
-const productFragment = gql`
+const productFragment = graphql(
+  `
     fragment product on Product {
-        __typename
-        id
-        slug
-        enabled
-        name
-        description
-        priceRange {
-            min
-            max
+      __typename
+      id
+      slug
+      enabled
+      name
+      description
+      optionGroups {
+        ...product_option_group
+      }
+      variantList(options: { take: 100 }) {
+        items {
+          ...variant
         }
-        optionGroups {
-            ...product_option_group
-        }
-        variantList(options: { take: 100 }) {
-            items {
-                ...variant
-            }
-        }
-        featuredAsset {
-            ...image
-        }
-        assets {
-            ...image
-        }
-        updatedAt
+      }
+      featuredAsset {
+        ...image
+      }
+      assets {
+        ...image
+      }
+      updatedAt
     }
-    ${assetFragment}
-    ${variantFragment}
-    ${productOptionGroupFragment}
-`;
+  `,
+  [assetFragment, variantFragment, productOptionGroupFragment]
+);
 
 export default productFragment;

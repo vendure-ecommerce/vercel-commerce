@@ -7,6 +7,8 @@ import MobileMenu from './mobile-menu';
 import Search, { SearchSkeleton } from './search';
 import OpenSignIn from '@/components/account/open-sign-in';
 import { UserDropdown } from '@/components/account/user-dropdown';
+import { readFragment } from '@/gql/graphql';
+import { collectionFragment } from '@/lib/vendure/queries/collection';
 
 const { SITE_NAME } = process.env;
 
@@ -35,17 +37,19 @@ export async function Navbar() {
           </Link>
           {menu.length ? (
             <ul className="hidden gap-6 text-sm md:flex md:items-center">
-              {menu.map((item) => (
-                <li key={item.slug}>
-                  <Link
-                    href={`/search/${item.slug}`}
-                    prefetch={true}
-                    className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
+              {menu
+                .map((data) => readFragment(collectionFragment, data))
+                .map((item) => (
+                  <li key={item.slug}>
+                    <Link
+                      href={`/search/${item.slug}`}
+                      prefetch={true}
+                      className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
             </ul>
           ) : null}
         </div>

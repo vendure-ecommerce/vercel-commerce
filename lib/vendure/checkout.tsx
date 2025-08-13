@@ -1,11 +1,12 @@
-import { Active_OrderFragment, Order } from '@/lib/vendure/types';
 import React from 'react';
 import { Addresses } from '@/components/checkout/addresses';
+import { ResultOf } from 'gql.tada';
+import activeOrderFragment from '@/lib/vendure/fragments/active-order';
 
 export type CheckoutStep = {
   title?: string;
   identifier: string;
-  validate: (order: Order) => boolean;
+  validate: (order: ResultOf<typeof activeOrderFragment>) => boolean;
   commit?: any;
   component?: React.ReactNode;
 };
@@ -46,7 +47,7 @@ export const checkoutSteps: Array<CheckoutStep> = [
 ];
 
 export function getCheckoutSteps(
-  currentStep: string | undefined
+  currentStep: string | undefined = undefined
 ): Array<CheckoutStep & { active: boolean; done: boolean }> {
   return checkoutSteps.map((step) => {
     return {

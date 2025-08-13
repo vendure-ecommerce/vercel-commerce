@@ -1,15 +1,16 @@
 'use client';
 
 import { createContext, PropsWithChildren, use, useContext } from 'react';
-import { Active_ChannelFragment } from '@/lib/vendure/types';
+import { ResultOf } from 'gql.tada';
+import activeChannelFragment from '@/lib/vendure/fragments/active-channel';
 
-const ChannelContext = createContext<Active_ChannelFragment | undefined>(undefined);
+const ChannelContext = createContext<ResultOf<typeof activeChannelFragment> | undefined>(undefined);
 
 export function ChannelProvider({
   channelPromise,
   children
 }: PropsWithChildren<{
-  channelPromise: Promise<Active_ChannelFragment | undefined>;
+  channelPromise: Promise<ResultOf<typeof activeChannelFragment> | undefined>;
 }>) {
   const channel = use(channelPromise);
 

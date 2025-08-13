@@ -9,7 +9,10 @@ import { ProductDescription } from 'components/product/product-description';
 import { getActiveChannel, getProduct } from 'lib/vendure';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import { Product } from '../../../lib/vendure/types';
+import { readFragment } from '@/gql/graphql';
+import assetFragment from '@/lib/vendure/fragments/image';
+import productFragment from '@/lib/vendure/fragments/product';
+import { ResultOf } from 'gql.tada';
 
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;
@@ -19,7 +22,7 @@ export async function generateMetadata(props: {
 
   if (!product) return notFound();
 
-  const { source, width, height } = product.featuredAsset || {};
+  const { source, width, height } = readFragment(assetFragment, product.featuredAsset) || {};
   const indexable = product.enabled;
 
   return {
@@ -52,6 +55,8 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
   const product = await getProduct(params.handle);
   const activeChannel = await getActiveChannel();
 
+  const featuredAsset = readFragment(assetFragment, product?.featuredAsset);
+
   if (!product) return notFound();
 
   const productJsonLd = {
@@ -59,7 +64,7 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
     '@type': 'Product',
     name: product.name,
     description: product.description,
-    image: product.featuredAsset?.source,
+    image: featuredAsset?.source,
     offers: {
       '@type': 'AggregateOffer',
       availability: product.enabled
@@ -89,10 +94,13 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
               }
             >
               <Gallery
-                images={product.assets.slice(0, 5).map((asset) => ({
-                  src: asset.source,
-                  altText: product.name
-                }))}
+                images={product.assets
+                  .slice(0, 5)
+                  .map((data) => readFragment(assetFragment, data))
+                  .map((asset) => ({
+                    src: asset.source,
+                    altText: product.name
+                  }))}
               />
             </Suspense>
           </div>
@@ -111,7 +119,7 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
 }
 
 async function RelatedProducts({ id }: { id: string }) {
-  const relatedProducts: Product[] = [];
+  const relatedProducts: Array<ResultOf<typeof productFragment>> = [];
 
   if (!relatedProducts.length) return null;
 
@@ -119,30 +127,33 @@ async function RelatedProducts({ id }: { id: string }) {
     <div className="py-8">
       <h2 className="mb-4 text-2xl font-bold">Related Products</h2>
       <ul className="flex w-full gap-4 overflow-x-auto pt-1">
-        {relatedProducts.map((product) => (
-          <li
-            key={product.slug}
-            className="aspect-square w-full flex-none min-[475px]:w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5"
-          >
-            <Link
-              className="relative h-full w-full"
-              href={`/product/${product.slug}`}
-              prefetch={true}
+        {relatedProducts.map((product) => {
+          const featuredAsset = readFragment(assetFragment, product.featuredAsset);
+          return (
+            <li
+              key={product.slug}
+              className="aspect-square w-full flex-none min-[475px]:w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5"
             >
-              <GridTileImage
-                alt={product.name}
-                label={{
-                  title: product.name,
-                  amount: '0',
-                  currencyCode: 'USD'
-                }}
-                src={product.featuredAsset?.preview ?? ''}
-                fill
-                sizes="(min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, (min-width: 475px) 50vw, 100vw"
-              />
-            </Link>
-          </li>
-        ))}
+              <Link
+                className="relative h-full w-full"
+                href={`/product/${product.slug}`}
+                prefetch={true}
+              >
+                <GridTileImage
+                  alt={product.name}
+                  label={{
+                    title: product.name,
+                    amount: '0',
+                    currencyCode: 'USD'
+                  }}
+                  src={featuredAsset?.preview ?? ''}
+                  fill
+                  sizes="(min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, (min-width: 475px) 50vw, 100vw"
+                />
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

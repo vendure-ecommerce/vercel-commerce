@@ -1,12 +1,13 @@
 'use client';
 
 import clsx from 'clsx';
-import {CollectionsQuery} from 'lib/vendure/types';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { ResultOf } from 'gql.tada';
+import { collectionFragment } from '@/lib/vendure/queries/collection';
 
-export function FooterMenuItem({ item }: { item: CollectionsQuery['collections']['items'][0] }) {
+export function FooterMenuItem({ item }: { item: ResultOf<typeof collectionFragment> }) {
   const pathname = usePathname();
   const [active, setActive] = useState(pathname === item.slug);
 
@@ -17,7 +18,7 @@ export function FooterMenuItem({ item }: { item: CollectionsQuery['collections']
   return (
     <li>
       <Link
-        href={item.slug}
+        href={`/search/${item.slug}`}
         className={clsx(
           'block p-2 text-lg underline-offset-4 hover:text-black hover:underline md:inline-block md:text-sm dark:hover:text-neutral-300',
           {
@@ -31,14 +32,18 @@ export function FooterMenuItem({ item }: { item: CollectionsQuery['collections']
   );
 }
 
-export default function FooterMenu({ menu }: { menu: CollectionsQuery['collections']['items'] }) {
+export default function FooterMenu({
+  menu
+}: {
+  menu: ResultOf<typeof collectionFragment>[];
+}) {
   if (!menu.length) return null;
 
   return (
     <nav>
       <ul>
-        {menu.map(item => {
-          return <FooterMenuItem key={item.slug} item={item} />;
+        {menu.map((item) => {
+          return <FooterMenuItem key={item.id} item={item} />;
         })}
       </ul>
     </nav>

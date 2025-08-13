@@ -4,9 +4,10 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { addItem } from 'components/cart/actions';
 import { useProduct } from 'components/product/product-context';
-import { GetProductQuery, Product, ProductFragment, ProductVariant } from 'lib/vendure/types';
 import { useActionState } from 'react';
-import { useCart } from './cart-context';
+import { ResultOf } from 'gql.tada';
+import productFragment, { variantFragment } from '@/lib/vendure/fragments/product';
+import { readFragment } from '@/gql/graphql';
 
 function SubmitButton({
   availableForSale,
@@ -26,7 +27,7 @@ function SubmitButton({
       </button>
     );
   }
-  
+
   if (!selectedVariantId) {
     return (
       <button
@@ -57,11 +58,11 @@ function SubmitButton({
   );
 }
 
-export function AddToCart({ product }: { product: ProductFragment }) {
+export function AddToCart({ product }: { product: ResultOf<typeof productFragment> }) {
   const { variantList, enabled: availableForSale } = product;
   const { state } = useProduct();
   const [message, formAction] = useActionState(addItem, null);
-  const variants = variantList?.items || [];
+  const variants = variantList?.items.map((data) => readFragment(variantFragment, data)) || [];
 
   const variant = variants.find((variant) =>
     variant.options.every((option) => option.code === state[option.group.code])

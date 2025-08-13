@@ -1,6 +1,6 @@
-import gql from 'graphql-tag';
+import { graphql } from '@/gql/graphql';
 
-export const authenticate = gql`
+export const authenticate = graphql(`
     mutation authenticate($input: AuthenticationInput!) {
         authenticate(input: $input) {
             ... on CurrentUser {
@@ -18,4 +18,4 @@ export const authenticate = gql`
             }
         }
     }
-`;
+`);

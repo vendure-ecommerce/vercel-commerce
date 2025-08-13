@@ -2,12 +2,13 @@ import clsx from 'clsx';
 import { Suspense } from 'react';
 import { getCollectionFacetValues, getFacets } from '@/lib/vendure';
 import FacetsFilter from './facets-filter';
-import { FacetFragment } from '@/lib/vendure/types';
+import { ResultOf } from 'gql.tada';
+import { facetFragment } from '@/lib/vendure/fragments/facet';
 
 const skeleton = 'h-10 w-full animate-pulse rounded';
 const items = 'bg-neutral-400 dark:bg-neutral-700';
 
-async function FacetsList({ collection, facets }: { collection: string; facets: FacetFragment[] }) {
+async function FacetsList({ collection, facets }: { collection: string; facets: ResultOf<typeof facetFragment>[] }) {
   const collectionFacetValues = collection ? await getCollectionFacetValues({ collection }) : [];
 
   return <FacetsFilter list={facets} collectionFacetValues={collectionFacetValues}></FacetsFilter>;
@@ -18,7 +19,7 @@ export default function Facets({
   facets
 }: {
   collection: string;
-  facets: FacetFragment[];
+  facets: ResultOf<typeof facetFragment>[];
 }) {
   return (
     <Suspense

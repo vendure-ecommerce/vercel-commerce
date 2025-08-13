@@ -1,5 +1,6 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
-import { SearchResultFragment } from './vendure/types';
+import { ResultOf } from 'gql.tada';
+import searchResultFragment from '@/lib/vendure/fragments/search-result';
 
 export const createUrl = (pathname: string, params: URLSearchParams | ReadonlyURLSearchParams) => {
   const paramsString = params.toString();
@@ -30,7 +31,7 @@ export const validateEnvironmentVariables = () => {
   }
 };
 
-export const getSearchResultPrice = (item: SearchResultFragment) => {
+export const getSearchResultPrice = (item: ResultOf<typeof searchResultFragment>) => {
   return (
     item.priceWithTax.__typename === 'SinglePrice'
       ? item.priceWithTax.value
@@ -39,3 +40,5 @@ export const getSearchResultPrice = (item: SearchResultFragment) => {
         : 0
   ).toFixed(2);
 };
+
+export type ItemOf<T extends Array<any>> = T extends (infer U)[] ? U : never;
