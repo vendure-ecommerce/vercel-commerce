@@ -9,6 +9,8 @@ import {
 import { UserIcon } from '@heroicons/react/24/outline';
 import { ResultOf } from 'gql.tada';
 import { activeCustomerFragment } from '@/lib/vendure/queries/active-customer';
+import Link from 'next/link';
+import { SignOutButton } from './sign-out-button';
 
 export async function UserDropdown({
   customer
@@ -25,11 +27,17 @@ export async function UserDropdown({
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuItem>Dashboard</DropdownMenuItem>
-        <DropdownMenuItem>Orders</DropdownMenuItem>
-        <DropdownMenuItem>Settings</DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/account">Dashboard</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/account/orders">Orders</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/account/settings">Settings</Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Sign out</DropdownMenuItem>
+        <SignOutButton />
       </DropdownMenuContent>
     </DropdownMenu>
   );

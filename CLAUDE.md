@@ -15,7 +15,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run test` - Run prettier check (primary test command)
 
 ### GraphQL
-- `pnpm codegen` - Generate TypeScript types from GraphQL schema (requires VENDURE_API_ENDPOINT env var)
+
+Codegen is done through `gql.data`. To actively re-generated the types run `npx gql-tada generate output`
 
 ## Architecture
 

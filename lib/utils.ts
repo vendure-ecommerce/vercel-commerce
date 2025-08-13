@@ -42,3 +42,10 @@ export const getSearchResultPrice = (item: ResultOf<typeof searchResultFragment>
 };
 
 export type ItemOf<T extends Array<any>> = T extends (infer U)[] ? U : never;
+
+export const formatCurrency = (amount: number, currencyCode: string) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currencyCode
+  }).format(amount / 100);
+};

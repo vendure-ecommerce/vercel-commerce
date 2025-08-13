@@ -1,6 +1,6 @@
 'use server';
 
-import { authenticateCustomer } from '@/lib/vendure';
+import { authenticateCustomer, updateCustomer } from '@/lib/vendure';
 import { revalidateTag } from 'next/cache';
 import { AUTH_COOKIE_KEY, TAGS } from '@/lib/constants';
 import { cookies } from 'next/headers';
@@ -9,6 +9,16 @@ export type SignInState =
   | {
       type: 'success';
       id: string;
+    }
+  | {
+      type: 'error';
+      message: string;
+    }
+  | null;
+
+export type UpdateCustomerState =
+  | {
+      type: 'success';
     }
   | {
       type: 'error';
@@ -58,4 +68,44 @@ export async function signIn(
       message: 'Error signing in'
     };
   }
+}
+
+export async function updateCustomerAction(
+  prevState: UpdateCustomerState | null,
+  formData: FormData
+): Promise<UpdateCustomerState> {
+  const firstName = formData.get('firstName');
+  const lastName = formData.get('lastName');
+
+  if (!firstName || !lastName) {
+    return {
+      type: 'error',
+      message: 'First name and last name are required'
+    };
+  }
+
+  try {
+    await updateCustomer({
+      firstName: firstName.toString(),
+      lastName: lastName.toString()
+    });
+
+    revalidateTag(TAGS.customer);
+
+    return {
+      type: 'success'
+    };
+  } catch (e: any) {
+    return {
+      type: 'error',
+      message: e.message || 'Error updating profile'
+    };
+  }
+}
+
+export async function signOutAction() {
+  const cookieStore = await cookies();
+  cookieStore.delete('vendure-token');
+  revalidateTag(TAGS.customer);
+  revalidateTag(TAGS.cart);
 }

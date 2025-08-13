@@ -25,11 +25,17 @@ import { facetFragment, facetValueFragment } from './fragments/facet';
 import activeOrderFragment from './fragments/active-order';
 import searchResultFragment from './fragments/search-result';
 import { authenticate } from '@/lib/vendure/mutations/customer';
+import { updateCustomerMutation } from '@/lib/vendure/mutations/update-customer';
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import {
   activeCustomerFragment,
   getActiveCustomerQuery
 } from '@/lib/vendure/queries/active-customer';
+import {
+  getCustomerOrdersQuery,
+  getOrderByCodeQuery
+} from '@/lib/vendure/queries/customer-orders';
+import orderFragment from '@/lib/vendure/fragments/order';
 import { VariablesOf, ResultOf } from 'gql.tada';
 import { readFragment } from '@/gql/graphql';
 import activeChannelFragment from '@/lib/vendure/fragments/active-channel';
@@ -335,6 +341,39 @@ export async function getActiveCustomer() {
   });
 
   return readFragment(activeCustomerFragment, res.body.activeCustomer);
+}
+
+export async function getCustomerOrders(options?: VariablesOf<typeof getCustomerOrdersQuery>['options']) {
+  const res = await vendureFetch({
+    query: getCustomerOrdersQuery,
+    tags: [TAGS.customer],
+    variables: { options },
+    headers: await getAuthHeaders()
+  });
+
+  return res.body.activeCustomer?.orders;
+}
+
+export async function getOrderByCode(code: string) {
+  const res = await vendureFetch({
+    query: getOrderByCodeQuery,
+    tags: [TAGS.customer],
+    variables: { code },
+    headers: await getAuthHeaders()
+  });
+
+  return res.body.orderByCode ? readFragment(orderFragment, res.body.orderByCode) : null;
+}
+
+export async function updateCustomer(input: VariablesOf<typeof updateCustomerMutation>['input']) {
+  const res = await vendureFetch({
+    query: updateCustomerMutation,
+    cache: 'no-store',
+    variables: { input },
+    headers: await getAuthHeaders()
+  });
+
+  return readFragment(activeCustomerFragment, res.body.updateCustomer);
 }
 
 export async function getPage(slug: string) {
