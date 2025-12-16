@@ -31,10 +31,7 @@ import {
   activeCustomerFragment,
   getActiveCustomerQuery
 } from '@/lib/vendure/queries/active-customer';
-import {
-  getCustomerOrdersQuery,
-  getOrderByCodeQuery
-} from '@/lib/vendure/queries/customer-orders';
+import { getCustomerOrdersQuery, getOrderByCodeQuery } from '@/lib/vendure/queries/customer-orders';
 import orderFragment from '@/lib/vendure/fragments/order';
 import { VariablesOf, ResultOf } from 'gql.tada';
 import { readFragment } from '@/gql/graphql';
@@ -181,7 +178,9 @@ export async function getActiveChannel(): Promise<ResultOf<typeof activeChannelF
   return readFragment(activeChannelFragment, res.body.activeChannel);
 }
 
-export async function getCollection(handle: string): Promise<ResultOf<typeof collectionFragment> | null> {
+export async function getCollection(
+  handle: string
+): Promise<ResultOf<typeof collectionFragment> | null> {
   const res = await vendureFetch({
     query: getCollectionQuery,
     tags: [TAGS.collections],
@@ -216,7 +215,7 @@ export async function getCollectionProducts({
     }
   });
 
-  return res.body.search.items.map(item => readFragment(searchResultFragment, item));
+  return res.body.search.items.map((item) => readFragment(searchResultFragment, item));
 }
 
 export async function getCollectionFacetValues({
@@ -239,7 +238,9 @@ export async function getCollectionFacetValues({
     }
   });
 
-  return res.body.search.facetValues.map((item) => readFragment(facetValueFragment, item.facetValue));
+  return res.body.search.facetValues.map((item) =>
+    readFragment(facetValueFragment, item.facetValue)
+  );
 }
 
 export async function getCollections({
@@ -258,7 +259,7 @@ export async function getCollections({
     }
   });
 
-  return res.body.collections.items.map(item => readFragment(collectionFragment, item));
+  return res.body.collections.items.map((item) => readFragment(collectionFragment, item));
 }
 
 export async function getFacets(): Promise<ResultOf<typeof facetFragment>[]> {
@@ -267,7 +268,7 @@ export async function getFacets(): Promise<ResultOf<typeof facetFragment>[]> {
     tags: [TAGS.facets]
   });
 
-  return res.body.facets.items.map(item => readFragment(facetFragment, item));
+  return res.body.facets.items.map((item) => readFragment(facetFragment, item));
 }
 
 export async function getMenu(): Promise<ResultOf<typeof collectionFragment>[]> {
@@ -276,7 +277,7 @@ export async function getMenu(): Promise<ResultOf<typeof collectionFragment>[]> 
     tags: [TAGS.collections]
   });
 
-  return res.body.collections.items.map(item => readFragment(collectionFragment, item));
+  return res.body.collections.items.map((item) => readFragment(collectionFragment, item));
 }
 
 export async function getProduct(handle: string) {
@@ -311,7 +312,7 @@ export async function getProducts({
     }
   });
 
-  return res.body.search.items.map(item => readFragment(searchResultFragment, item));
+  return res.body.search.items.map((item) => readFragment(searchResultFragment, item));
 }
 
 export async function authenticateCustomer(username: string, password: string) {
@@ -343,7 +344,9 @@ export async function getActiveCustomer() {
   return readFragment(activeCustomerFragment, res.body.activeCustomer);
 }
 
-export async function getCustomerOrders(options?: VariablesOf<typeof getCustomerOrdersQuery>['options']) {
+export async function getCustomerOrders(
+  options?: VariablesOf<typeof getCustomerOrdersQuery>['options']
+) {
   const res = await vendureFetch({
     query: getCustomerOrdersQuery,
     tags: [TAGS.customer],
@@ -402,11 +405,11 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   }
 
   if (isCollectionUpdate) {
-    revalidateTag(TAGS.collections);
+    revalidateTag(TAGS.collections, 'max');
   }
 
   if (isProductUpdate) {
-    revalidateTag(TAGS.products);
+    revalidateTag(TAGS.products, 'max');
   }
 
   return NextResponse.json({ status: 200, revalidated: true, now: Date.now() });

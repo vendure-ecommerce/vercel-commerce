@@ -42,7 +42,7 @@ export async function signIn(
 
   try {
     const res = await authenticateCustomer(username.toString(), password.toString());
-    revalidateTag(TAGS.customer);
+    revalidateTag(TAGS.customer, 'max');
 
     if (res.__typename === 'CurrentUser') {
       return {
@@ -90,7 +90,7 @@ export async function updateCustomerAction(
       lastName: lastName.toString()
     });
 
-    revalidateTag(TAGS.customer);
+    revalidateTag(TAGS.customer, 'max');
 
     return {
       type: 'success'
@@ -106,6 +106,6 @@ export async function updateCustomerAction(
 export async function signOutAction() {
   const cookieStore = await cookies();
   cookieStore.delete('vendure-token');
-  revalidateTag(TAGS.customer);
-  revalidateTag(TAGS.cart);
+  revalidateTag(TAGS.customer, 'max');
+  revalidateTag(TAGS.cart, 'max');
 }

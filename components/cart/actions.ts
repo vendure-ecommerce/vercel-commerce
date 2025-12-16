@@ -12,7 +12,7 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
 
   try {
     await addToCart(selectedVariantId, 1);
-    revalidateTag(TAGS.cart);
+    revalidateTag(TAGS.cart, 'max');
   } catch (e) {
     return 'Error adding item to cart';
   }
@@ -21,7 +21,7 @@ export async function addItem(prevState: any, selectedVariantId: string | undefi
 export async function removeItem(prevState: any, merchandiseId: string) {
   try {
     await removeFromCart(merchandiseId);
-    revalidateTag(TAGS.cart);
+    revalidateTag(TAGS.cart, 'max');
   } catch (e) {
     return 'Error removing item from cart';
   }
@@ -38,7 +38,7 @@ export async function updateItemQuantity(
 
   try {
     await adjustCartItem(merchandiseId, quantity);
-    revalidateTag(TAGS.cart);
+    revalidateTag(TAGS.cart, 'max');
   } catch (e) {
     console.error(e);
     return 'Error updating item quantity';
